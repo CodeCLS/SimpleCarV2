@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_fragment_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <HorizontalScrollView
+        android:id="@+id/scrollview_IDFF_CARS"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/standard_button_information"
+        app:layout_constraintStart_toStartOf="parent"
+        android:scrollbars="none"
+
+        android:layout_marginTop="@dimen/margin_1"
+        android:layout_marginStart="@dimen/margin_1"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:id="@+id/car_list_linearlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/margin_1"
+
+            android:orientation="horizontal">
+
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+
+    <cls.simplecar.views.StandardButton
+        android:id="@+id/standard_button_information"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_1"
+        app:layout_constraintEnd_toStartOf="@+id/standard_button_notifications"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:standard_btn_icon="@drawable/ic_information_sign"
+        app:standard_btn_text="@string/information" />
+
+    <cls.simplecar.views.StandardButton
+        android:id="@+id/standard_button_notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/standard_button_information"
+        app:layout_constraintTop_toTopOf="parent"
+        app:standard_btn_icon="@drawable/ic_notification"
+        app:standard_btn_text="@string/notifications" />
+
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_1"
+        app:layout_constraintTop_toBottomOf="@id/scrollview_IDFF_CARS"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:scrollbars="none"
+
+        android:orientation="vertical">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clnsads"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <cls.simplecar.views.StandardButton
+                android:id="@+id/main_remove_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_1"
+                android:layout_marginEnd="@dimen/margin_1"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/margin_1"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_log_view"
+                app:standard_btn_icon="@drawable/ic_delete"
+                app:standard_btn_text="Remove" />
+            <cls.simplecar.views.CarLogView
+                android:id="@+id/car_log_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_1"
+                android:layout_marginEnd="@dimen/margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/margin_1"
+                app:layout_constraintTop_toBottomOf="@id/btn_container_lock" />
+
+            <LinearLayout
+                android:id="@+id/btn_container_lock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_1"
+                android:layout_marginEnd="@dimen/margin_1"
+
+                android:layout_marginTop="@dimen/margin_1"
+
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/car_charge_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <cls.simplecar.views.StandardButton
+                    android:id="@+id/main_lock_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+
+                    android:layout_weight="1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+
+                    app:layout_constraintStart_toEndOf="@+id/main_unlock_btn"
+                    app:standard_btn_icon="@drawable/ic_lock"
+                    app:standard_btn_text="Lock" />
+
+                <cls.simplecar.views.StandardButton
+                    android:id="@+id/main_unlock_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/main_lock_btn"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:standard_btn_icon="@drawable/ic_unlock"
+                    app:standard_btn_text="Unlock" />
+
+
+            </LinearLayout>
+
+
+            <cls.simplecar.views.CarChargeView
+                android:id="@+id/car_charge_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_1"
+                android:layout_marginEnd="@dimen/margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                app:layout_constraintBottom_toTopOf="@id/btn_container_lock"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/margin_1"
+                app:layout_constraintTop_toBottomOf="@id/location_main_fragment" />
+
+            <cls.simplecar.views.CarInfoView
+                android:id="@+id/car_info_view_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_1"
+                android:layout_marginEnd="@dimen/margin_1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <cls.simplecar.views.LocationView
+                android:id="@+id/location_main_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_1"
+                android:layout_marginTop="@dimen/margin_1"
+                android:layout_marginEnd="@dimen/margin_1"
+                app:layout_constraintEnd_toStartOf="@+id/monthly_plan_view_main"
+                app:layout_constraintHorizontal_bias="0.5"
+
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_info_view_main" />
+
+            <cls.simplecar.views.MonthlyPlanView
+                android:id="@+id/monthly_plan_view_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_1"
+
+                android:layout_marginEnd="@dimen/margin_1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/location_main_fragment"
+                app:layout_constraintTop_toBottomOf="@id/car_info_view_main" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

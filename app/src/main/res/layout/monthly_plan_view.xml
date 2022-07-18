@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/map_main_width"
+    android:layout_height="@dimen/map_main_height"
+    android:background="@drawable/background_main_monthly_plan">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_person_main_monthly"
+        android:layout_width="@dimen/img_size_regular"
+        android:layout_height="@dimen/img_size_regular"
+        android:src="@drawable/ic_person"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/margin_3" />
+
+    <TextView
+        android:id="@+id/txt_name_main_monthly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Caleb Seeling"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/textActive"
+        android:textSize="@dimen/text_size_1"
+        app:layout_constraintTop_toBottomOf="@id/img_person_main_monthly"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/margin_regular"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/textPassive"
+        android:layout_marginStart="@dimen/margin_1"
+        android:layout_marginEnd="@dimen/margin_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_name_main_monthly"
+        app:layout_constraintBottom_toTopOf="@id/txt_monthly_amount" />
+
+    <TextView
+        android:id="@+id/txt_monthly_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FREE"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/textActive"
+        android:textSize="@dimen/text_size_6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/margin_1"
+   />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

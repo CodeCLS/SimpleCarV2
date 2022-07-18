@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/img_porsche"
+        android:layout_width="@dimen/img_size_large"
+        android:layout_height="@dimen/img_size_large"
+        android:layout_marginTop="@dimen/margin_4"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintBottom_toTopOf="@+id/title_introduction_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/title_introduction_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_1"
+        android:layout_marginTop="@dimen/margin_1"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="SimpleCar"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_4"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/text_introduction_your_car"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_porsche" />
+
+    <TextView
+        android:id="@+id/text_introduction_your_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_1"
+        android:layout_marginTop="@dimen/margin_1"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="Your car manager"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_6"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/standardButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_introduction_text" />
+
+
+    <cls.simplecar.views.StandardButton
+        android:id="@+id/standardButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_regular"
+        android:layout_marginEnd="@dimen/margin_regular"
+
+        android:layout_marginBottom="@dimen/margin_1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:standard_btn_icon="@drawable/ic_ok"
+        app:standard_btn_text="Continue" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

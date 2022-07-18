@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">SimpleCar</string>
+    <string name="your_car_txt">Your Car</string>
+    <string name="tesla_car_txt">Tesla Model Y</string>
+    <string name="notifications">Notifications</string>
+    <string name="information">Information</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoiY29kZWxzIiwiYSI6ImNrZDM4MmRxajFsOXIzMW12cDd5OW1mOG4ifQ.hO0KqIOMjz5Gs7MPMqMFUw</string>
+    <string name="_2_344_56"><b>$ 2,344</b></string>
+    <string name="unlock_lock_location_charge_fuel">Unlock/Lock\nLocation\nCharge/Fuel</string>
+    <string name="features">Features</string>
+    <string name="location_introduction_title">Location</string>
+    <string name="location_introduction_desc">Always know where your car is situated</string>
+    <string name="unlock_introduction_title">Lock/Unlock</string>
+    <string name="unlock_introduction_desc">Lock and unlock your car switly and reliable</string>
+    <string name="battery_introduction_title">Charge/Fuel + Range</string>
+    <string name="battery_introduction_desc">Always know how much energy or fuel is in your car and how far it can drive</string>
+    <string name="car_widget_desc">A widget to see information regarding your vehicle</string>
+    <string name="a_field_invalid">A field is empty or invalid</string>
+    <string name="internal_error">Something went wrong. Can\'t connect to Server.</string>
+    <string name="email_error_signup">Something is wrong with your email.</string>
+    <string name="phone_error_signup">Something is wrong with your phone number.</string>
+    <string name="name_error_signup">Something is wrong with the name you have entered.</string>
+    <string name="telephone_number">Telephone Number</string>
+    <string name="email">Email</string>
+    <string name="first_name">First name</string>
+    <string name="second_name">Second name</string>
+
+</resources>

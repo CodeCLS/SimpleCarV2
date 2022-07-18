@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:minWidth="@dimen/input_view_width"
+    android:layout_height="@dimen/input_view_height"
+    android:background="@drawable/background_input_view"
+    android:layout_width="match_parent">
+
+    <EditText
+        android:id="@+id/input_view_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:fontFamily="@font/montserrat_medium"
+        android:background="@null"
+        android:textColor="@color/textPassive"
+        android:textColorHint="@color/textPassive"
+        android:paddingStart="@dimen/margin_3"
+        android:hint="..."
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

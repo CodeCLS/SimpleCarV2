@@ -1,0 +1,114 @@
+{
+  "project_info": {
+    "project_number": "1027482205344",
+    "firebase_url": "https://simplecar-d60c5-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "simplecar-d60c5",
+    "storage_bucket": "simplecar-d60c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027482205344:android:cf0a5304bbc9ce08681dc5",
+        "android_client_info": {
+          "package_name": "android.carlo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027482205344-nvgipvvl7f4ttflsb2cgvhkotvtjhpeg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "android.carlo",
+            "certificate_hash": "b5d080a2eab18e854442b701bfbd7e8819ac5fbd"
+          }
+        },
+        {
+          "client_id": "1027482205344-oj7eq7et63q5hv5pir37ch9l2rb5duis.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3tbCIKPhWXe7un59eDPwYCoCakxXeft0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027482205344-oj7eq7et63q5hv5pir37ch9l2rb5duis.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027482205344:android:58fe0097748a4b30681dc5",
+        "android_client_info": {
+          "package_name": "cls.android.simplecar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027482205344-oj7eq7et63q5hv5pir37ch9l2rb5duis.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3tbCIKPhWXe7un59eDPwYCoCakxXeft0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027482205344-oj7eq7et63q5hv5pir37ch9l2rb5duis.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027482205344:android:456bf5ccb82d7948681dc5",
+        "android_client_info": {
+          "package_name": "cls.simplecar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027482205344-fq7ji30qpb22ail060knea7pfs9niop6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cls.simplecar",
+            "certificate_hash": "b5d080a2eab18e854442b701bfbd7e8819ac5fbd"
+          }
+        },
+        {
+          "client_id": "1027482205344-oj7eq7et63q5hv5pir37ch9l2rb5duis.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3tbCIKPhWXe7un59eDPwYCoCakxXeft0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027482205344-oj7eq7et63q5hv5pir37ch9l2rb5duis.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
