@@ -1,8 +1,11 @@
 package cls.android.simplecar.fragments;
 
 import cls.android.simplecar.Application;
+import cls.android.simplecar.R;
 import cls.android.simplecar.SaveDataTool;
+import cls.android.simplecar.Spawner;
 import cls.android.simplecar.UserRepository;
+import cls.android.simplecar.api.ApiResult;
 import cls.android.simplecar.api.SimpleCarSdk;
 import cls.android.simplecar.api.VehicleAttributes;
 import cls.android.simplecar.database.CarDataBaseRepo;
@@ -18,6 +21,8 @@ import cls.android.simplecar.tools.UpdaterConnection;
 import android.content.Context;
 
 
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -167,15 +172,10 @@ public class CarViewModel extends ViewModel {
         CarDataBaseRepo.getInstance(context).getCarWithSmartCarId(id,OnRetrieveCar);
     }
 
-    public void unlockCar(Context context) {
+    public void unlockCar(Context context,ApiResult apiResult) {
         String code = saveDataTool.get(SaveDataTool.SMARTCAR_ACCESS_KEY,null);
 
-        //simpleCarSdk.unlockVehicle(carMutableLiveData.getValue().getSmartCarId(), new ApiResult() {
-        //    @Override
-        //    public void result(@Nullable Boolean result) {
-//
-        //    }
-        //});
+        simpleCarSdk.unlockVehicle(carMutableLiveData.getValue().getSmartCarId(),apiResult);
     }
 
     public LiveData<Car> getLiveCarFromDB(Context context, String smartCarId) {

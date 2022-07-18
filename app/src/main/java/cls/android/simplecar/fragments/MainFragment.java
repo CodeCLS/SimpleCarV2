@@ -4,6 +4,7 @@ import cls.android.simplecar.MainActivity;
 import cls.android.simplecar.R;
 import cls.android.simplecar.SaveDataTool;
 import cls.android.simplecar.Spawner;
+import cls.android.simplecar.api.ApiResult;
 import cls.android.simplecar.database.CarDataBaseRepo;
 import cls.android.simplecar.models.Car;
 import cls.android.simplecar.views.CarChargeView;
@@ -131,12 +132,17 @@ public class MainFragment extends Fragment {
         unlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view1) {
-                viewModel.unlockCar(getContext());
-                Spawner.spawnMessageToast(
-                        view,
-                        "Unlock" ,
-                        "An unlock request has been sent to your car. If your car isn't unlocked within the minute, please try again later or contact support.",parent);
-
+                viewModel.unlockCar(getContext(), new ApiResult() {
+                    @Override
+                    public void result(boolean result) {
+                        if (result) {
+                            String title = "Unlock";
+                            String desc = "An unlock request has been sent to your car. If your car isn't unlocked within the minute, please try again later or contact support.";
+                            boolean hasButton = true;
+                            Spawner.queueSpawnMessageToast(title, desc, hasButton, view, parent);
+                        }
+                    }
+                });
             }
         });
         locationView.setOnClickListener(new View.OnClickListener() {
@@ -153,21 +159,32 @@ public class MainFragment extends Fragment {
         lock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view1) {
-                viewModel.unlockCar(getContext());
-                Spawner.spawnMessageToast(
-                        view,
-                        "Lock" ,
-                        "A lock request has been sent to your car. If your car isn't locked within the minute, please try again later or contact support.",parent);
+                viewModel.unlockCar(getContext(), new ApiResult() {
+                    @Override
+                    public void result(boolean result) {
+                        if (result) {
+                            String title = "Lock";
+                            String desc = "A lock request has been sent to your car. If your car isn't locked within the minute, please try again later or contact support";
+                            Spawner.queueSpawnMessageToast(title, desc, true, view, parent);
+                        }
+                    }
+                });
+
+                //Spawner.spawnMessageToast(
+                //        view,
+                //        "Lock" ,
+                //        "A lock request has been sent to your car. If your car isn't locked within the minute, please try again later or contact support.",
+                //        parent);
 
             }
         });
         information.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Spawner.spawnMessageToast(
-                        view,
-                        "SimpleCar" ,
-                        "SimpleCar is an app developed by Caleb Seeling in May 2022. It focuses on the attributes of a car. Support: primocaleb@gmail.com ",parent);
+                //Spawner.spawnMessageToast(
+                //        view,
+                //        "SimpleCar" ,
+                //        "SimpleCar is an app developed by Caleb Seeling in May 2022. It focuses on the attributes of a car. Support: primocaleb@gmail.com ",parent);
             }
         });
         viewModel = ((MainActivity)getActivity()).getViewModelCar();

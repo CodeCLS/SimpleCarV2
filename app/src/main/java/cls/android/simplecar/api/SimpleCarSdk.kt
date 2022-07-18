@@ -39,7 +39,7 @@ class SimpleCarSdk {
             return instance as SimpleCarSdk
         }
     }
-    fun getVehicles(vehicleIdListCallback: VehicleIdListCallback) {
+    fun getVehicleIds(vehicleIdListCallback: VehicleIdListCallback) {
         service.getCars(apiCode,smartCarCode,uid).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -53,6 +53,7 @@ class SimpleCarSdk {
         })
 
     }
+
 
     fun getRange(id : String,rangeCallback: RangeCallback) {
         service.getVehicleRange(apiCode,smartCarCode,id,uid).enqueue(object :

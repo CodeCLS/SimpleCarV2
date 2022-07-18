@@ -6,15 +6,24 @@ import android.view.ViewGroup;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cls.android.simplecar.views.MessageToastView;
 
 public class Spawner {
+    private static List<Runnable> toDoArray = new ArrayList<>();
     private static boolean isToastShown = false;
 
-    public static void spawnMessageToast(View view, String unlock_request_send, String s, ViewGroup v) {
+    public static void setIsToastShown(boolean isToastShown) {
+        Spawner.isToastShown = isToastShown;
+
+    }
+
+    public static void spawnMessageToast(View view, String unlock_request_send, String s, ViewGroup v,boolean hasButton) {
         if (isToastShown)
             return;
-        isToastShown=true;
+        setIsToastShown(true);
         MessageToastView messageToastView = new MessageToastView(view.getContext());
         messageToastView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         messageToastView.setTitle(unlock_request_send);
@@ -24,7 +33,7 @@ public class Spawner {
         messageToastView.setStateCallback(new StateCallBack() {
             @Override
             public void destroyed() {
-                isToastShown = false;
+                setIsToastShown(false);
             }
         });
         v.addView(messageToastView);
@@ -40,6 +49,20 @@ public class Spawner {
 
         }
     }
+
+    public static void queueSpawnMessageToast(String title, String desc, boolean hasButton, View view, ViewGroup parent) {
+        if (isToastShown)
+            toDoArray.add(new Runnable() {
+                @Override
+                public void run() {
+                    spawnMessageToast(view,title,desc,parent,hasButton);
+                }
+            });
+        else{
+            spawnMessageToast(view,title,desc,parent,hasButton);
+        }
+    }
+
     public interface StateCallBack{
         void destroyed();
     }
