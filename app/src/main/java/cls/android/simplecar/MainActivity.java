@@ -86,8 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void redirect() {
-        Purchase purchase = new SaveDataTool(this).getPurchase();
-        Log.d(TAG, "redirect: " + purchase);
+        Purchase purchase = BillingTool.getInstance().getPurchase();
         if (purchase == null){
             showBilling();
             return;

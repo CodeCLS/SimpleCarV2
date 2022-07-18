@@ -1,6 +1,6 @@
-package cls.android.simplecar.api;
+package cls.android.simplecar.api
 
 interface VehicleCallback {
-    fun getVehicles(list : List<String>?)
+    fun getVehicle(vehicleAttributes: VehicleAttributes?)
     fun exception(exception: Exception)
 }

@@ -216,4 +216,8 @@ public class BillingTool {
     public void post(Runnable runnable) {
         this.runnableWhenConnected = runnable;
     }
+
+    public Purchase getPurchase() {
+        return new SaveDataTool(getContext()).getPurchase();
+    }
 }

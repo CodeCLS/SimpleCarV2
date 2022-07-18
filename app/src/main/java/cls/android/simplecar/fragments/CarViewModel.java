@@ -3,33 +3,21 @@ package cls.android.simplecar.fragments;
 import cls.android.simplecar.Application;
 import cls.android.simplecar.SaveDataTool;
 import cls.android.simplecar.UserRepository;
-import cls.android.simplecar.api.ApiResult;
 import cls.android.simplecar.api.SimpleCarSdk;
 import cls.android.simplecar.api.VehicleAttributes;
-import cls.android.simplecar.api.VehicleCallback;
 import cls.android.simplecar.database.CarDataBaseRepo;
 import cls.android.simplecar.models.Car;
 import cls.android.simplecar.models.Location;
-import cls.android.simplecar.Application;
-import cls.android.simplecar.UserRepository;
-import cls.android.simplecar.SaveDataTool;
 import cls.android.simplecar.SmartCarLauncher;
 
 
-import cls.android.simplecar.models.Car;
-import cls.android.simplecar.models.Location;
-import cls.android.simplecar.models.Range;
 import cls.android.simplecar.models.User;
 import cls.android.simplecar.tools.CarAttributesUpdater;
-import cls.android.simplecar.tools.Converter;
 import cls.android.simplecar.tools.DateUtil;
 import cls.android.simplecar.tools.UpdaterConnection;
 import android.content.Context;
-import android.util.Log;
 
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
