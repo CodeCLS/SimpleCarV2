@@ -35,14 +35,11 @@ import java.util.concurrent.Executors;
 
 public class CarViewModel extends ViewModel {
     private static final String TAG = "CarViewModel";
+    private SimpleCarSdk simpleCarSdk;
     private SaveDataTool saveDataTool;
     public MutableLiveData<Car> carMutableLiveData = new MutableLiveData<Car>();
     public LiveData<List<Car>> carsLiveData = new MutableLiveData<List<Car>>();
-    public SimpleCarSdk simpleCarSdk = SimpleCarSdk.Companion.get(
-            Application.getSimpleCarApiCode(),
-            UserRepository.getInstance().getUser().getAccessTokenSmartCar(),
-            UserRepository.getInstance().getUser().getUidFire()
-            );
+
 
     public MutableLiveData<Location> monthlySubscriptionMutableLiveData = new MutableLiveData<>();
     public MutableLiveData<Boolean> isNotificationsEnabled = new MutableLiveData<>();
@@ -53,9 +50,15 @@ public class CarViewModel extends ViewModel {
     public CarViewModel() {
         launcher = new SmartCarLauncher();
 
+
     }
     public void init(Context context){
         saveDataTool = new SaveDataTool(context);
+        simpleCarSdk = SimpleCarSdk.Companion.get(
+                Application.getSimpleCarApiCode(),
+                UserRepository.getInstance(context).getUser().getAccessTokenSmartCar(),
+                UserRepository.getInstance(context).getUser().getUidFire()
+        );
     }
 
     public LiveData<List<Car>> getCarsLiveData() {
@@ -189,8 +192,8 @@ public class CarViewModel extends ViewModel {
 
     }
 
-    public void saveUser(User parseUser) {
-        UserRepository.getInstance().saveUser(parseUser);
+    public void saveUser(Context context,User parseUser) {
+        UserRepository.getInstance(context).saveUser(parseUser);
     }
     public static Car parseCar(VehicleAttributes vehicleAttributes) {
         if (vehicleAttributes== null)

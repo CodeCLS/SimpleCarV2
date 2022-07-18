@@ -78,7 +78,7 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
 
-    <cls.simplecar.views.StandardButton
+    <cls.android.simplecar.views.StandardButton
         android:id="@+id/button_additional_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showBilling() {
-        showFragment(new GooglePayFragment());
+        //TODO change this
+        //showFragment(new GooglePayFragment());
     }
 }

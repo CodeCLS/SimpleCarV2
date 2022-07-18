@@ -1,5 +1,9 @@
 package cls.android.simplecar.models;
 
+import androidx.annotation.NonNull;
+
+import org.jetbrains.annotations.NonNls;
+
 public class User {
     private String firstName;
     private String secondName;

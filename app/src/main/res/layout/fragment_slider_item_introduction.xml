@@ -52,7 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/slider_item_fragment_title" />
 
-    <cls.simplecar.views.StandardButton
+    <cls.android.simplecar.views.StandardButton
         android:id="@+id/slider_item_fragment_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <cls.simplecar.views.StandardButton
+    <cls.android.simplecar.views.StandardButton
         android:id="@+id/btn_pay_basic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         app:standard_btn_icon="@drawable/ic_car"
         app:standard_btn_text="Basic Tier" />
 
-    <cls.simplecar.views.StandardButton
+    <cls.android.simplecar.views.StandardButton
         android:id="@+id/btn_pay_pro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

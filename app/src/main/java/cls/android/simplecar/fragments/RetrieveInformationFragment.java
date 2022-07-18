@@ -69,7 +69,8 @@ public class RetrieveInformationFragment extends Fragment {
                                 public void result(boolean apiResponse, @NonNull Status status) {
                                     if (true){
                                         if(apiResponse){
-                                            ((MainActivity)getActivity()).getViewModelCar().saveUser(new JsonUtil().parseUser(status.getAdditionalInformation()));
+                                            ((MainActivity)getActivity()).getViewModelCar().saveUser(getContext(),
+                                                    new JsonUtil().parseUser(status.getAdditionalInformation()));
                                             redirect();
 
                                         }

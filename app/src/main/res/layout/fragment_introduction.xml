@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/title_introduction_text" />
 
 
-    <cls.simplecar.views.StandardButton
+    <cls.android.simplecar.views.StandardButton
         android:id="@+id/standardButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

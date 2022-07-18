@@ -6,19 +6,27 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import kotlin.Exception
 
 class SimpleCarSdk {
+    private var hasFunctionalAttributes: Boolean = true
     private lateinit var apiCode: String
     private lateinit var smartCarCode: String
     private lateinit var uid: String
     private val version : Int = 10//asd
 
     private lateinit var service : ApiService
-    constructor(apiCode: String, smartCarCode : String, uid : String){
-        this.apiCode = apiCode
-        this.smartCarCode = smartCarCode
-        this.uid = uid
+    constructor(apiCode: String?, smartCarCode : String?, uid : String?){
+       if (apiCode == null || smartCarCode == null || uid == null){
+           hasFunctionalAttributes = false
+           return
+       }
+       else {
+
+           this.apiCode = apiCode
+           this.smartCarCode = smartCarCode
+           this.uid = uid
+       }
+
     }
     init {
         val retrofit: Retrofit = Retrofit.Builder()
@@ -33,7 +41,7 @@ class SimpleCarSdk {
 
     public companion object {
         var instance: SimpleCarSdk? = null
-        public fun get(apiCode: String, smartCarCode: String, uid:String) : SimpleCarSdk{
+        public fun get(apiCode: String?, smartCarCode: String?, uid:String?) : SimpleCarSdk{
             if(instance == null)
                 instance = SimpleCarSdk(apiCode,smartCarCode,uid)
             return instance as SimpleCarSdk
