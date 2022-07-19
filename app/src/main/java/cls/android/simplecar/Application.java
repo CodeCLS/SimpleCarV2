@@ -7,7 +7,7 @@ public class Application extends android.app.Application {
     private static Context context;
 
     public static String getSimpleCarApiCode() {
-        return "oaiu3490S=?n´´03´´ß094ßn´´0";
+        return "oaiu3490S=?nD2103_qR094Pn-+0";
     }
 
     @Override

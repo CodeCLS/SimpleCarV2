@@ -15,9 +15,22 @@ public class User {
     private int amountVehicles;
     private String accessTokenSmartCar;
     private String authClientSmartCar;
+    private String refreshTokenSmartCar;
     private String authSmartCar;
 
-    public User(String firstName, String secondName, String email, int phone, Subscription subscription, String uidFire, String uidSimpleCar, int amountVehicles, String accessTokenSmartCar, String authClientSmartCar, String authSmartCar) {
+    public User(
+            String firstName,
+            String secondName,
+            String email,
+            int phone,
+            Subscription subscription,
+            String uidFire,
+            String uidSimpleCar,
+            int amountVehicles,
+            String accessTokenSmartCar,
+            String authClientSmartCar,
+            String authSmartCar,
+            String refreshTokenSmartCar) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.email = email;
@@ -29,6 +42,7 @@ public class User {
         this.accessTokenSmartCar = accessTokenSmartCar;
         this.authClientSmartCar = authClientSmartCar;
         this.authSmartCar = authSmartCar;
+        this.refreshTokenSmartCar = refreshTokenSmartCar;
     }
 
     public User() {
@@ -120,5 +134,13 @@ public class User {
 
     public void setAuthSmartCar(String authSmartCar) {
         this.authSmartCar = authSmartCar;
+    }
+
+    public String getRefreshTokenSmartCar() {
+        return refreshTokenSmartCar;
+    }
+
+    public void setRefreshTokenSmartCar(String refreshTokenSmartCar) {
+        this.refreshTokenSmartCar = refreshTokenSmartCar;
     }
 }

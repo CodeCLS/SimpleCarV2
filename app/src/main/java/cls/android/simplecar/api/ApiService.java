@@ -1,5 +1,7 @@
 package cls.android.simplecar.api;
 
+import org.jetbrains.annotations.NotNull;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -85,4 +87,9 @@ public interface ApiService {
     Call<ResponseBody> signup(@Header("api-code") String apiCode,
                               @Header("access-token-smart-car") String token,
                               @Body String body);
+
+    @GET("user/{uid}/exchange/auth")
+    Call<ResponseBody> getAccessWithAuthToken(@Header("api-code") String apiCode,
+                                  @Header("access-token-smart-car") String token,
+                                  @Path("uid") String uid);
 }

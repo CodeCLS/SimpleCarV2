@@ -5,7 +5,10 @@ import cls.android.simplecar.R;
 import cls.android.simplecar.SaveDataTool;
 import cls.android.simplecar.Spawner;
 import cls.android.simplecar.UserRepository;
+import cls.android.simplecar.api.ApiAuthPackageCallback;
 import cls.android.simplecar.api.ApiResult;
+import cls.android.simplecar.api.ApiSmartCarAuthPackage;
+import cls.android.simplecar.api.Exception;
 import cls.android.simplecar.api.SimpleCarSdk;
 import cls.android.simplecar.api.VehicleAttributes;
 import cls.android.simplecar.database.CarDataBaseRepo;
@@ -19,8 +22,11 @@ import cls.android.simplecar.tools.CarAttributesUpdater;
 import cls.android.simplecar.tools.DateUtil;
 import cls.android.simplecar.tools.UpdaterConnection;
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
@@ -126,17 +132,28 @@ public class CarViewModel extends ViewModel {
     }
 
     private void updateAccess(SmartcarResponse smartcarResponse, Context context) {
-        //simpleCarSdk.getAccessWithAuthCode(smartcarResponse.getCode(), new ApiAccessResponseCallback() {
-        //    @Override
-        //    public void result(@Nullable ApiAccessResponse response) {
-        //        User user = UserRepository.getInstance().getUser();
-        //        user.setAccessTokenSmartCar(response.getAccessToken());
-        //        user.setAuthClientSmartCar(response.getAuthClient());
-        //        user.setAuthSmartCar(response.getAuth());
-        //        UserRepository.getInstance().saveUser(user);
-        //        getHasAccess().setValue(true);
-        //    }
-        //});
+        simpleCarSdk.getAccessTokenWithAuthToken(smartcarResponse.getCode(), new ApiAuthPackageCallback() {
+            @Override
+            public void result(@Nullable ApiSmartCarAuthPackage packageSmartCar) {
+                if (packageSmartCar != null){
+                    User user = UserRepository.getInstance(context).getUser();
+                    user.setAccessTokenSmartCar(packageSmartCar.getAccessToken());
+                    user.setAuthClientSmartCar(packageSmartCar.getAuthClient());
+                    user.setAuthSmartCar(packageSmartCar.getAuth());
+                    user.setRefreshTokenSmartCar(packageSmartCar.getRefreshToken());
+                    UserRepository.getInstance(context).saveUser(user);
+                    getHasAccess().setValue(true);
+
+                }
+            }
+
+            @Override
+            public void exception(@NonNull Exception exception) {
+                Log.d(TAG, "exception: "+ exception.getMsg());
+                Toast.makeText(context, R.string.internal_error, Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
 

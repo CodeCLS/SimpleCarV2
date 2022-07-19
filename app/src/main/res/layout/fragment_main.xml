@@ -31,7 +31,7 @@
 
 
 
-    <cls.simplecar.views.StandardButton
+    <cls.android.simplecar.views.StandardButton
         android:id="@+id/standard_button_information"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
         app:standard_btn_icon="@drawable/ic_information_sign"
         app:standard_btn_text="@string/information" />
 
-    <cls.simplecar.views.StandardButton
+    <cls.android.simplecar.views.StandardButton
         android:id="@+id/standard_button_notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <cls.simplecar.views.StandardButton
+            <cls.android.simplecar.views.StandardButton
                 android:id="@+id/main_remove_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                 app:layout_constraintTop_toBottomOf="@id/car_log_view"
                 app:standard_btn_icon="@drawable/ic_delete"
                 app:standard_btn_text="Remove" />
-            <cls.simplecar.views.CarLogView
+            <cls.android.simplecar.views.CarLogView
                 android:id="@+id/car_log_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
-                <cls.simplecar.views.StandardButton
+                <cls.android.simplecar.views.StandardButton
                     android:id="@+id/main_lock_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -128,7 +128,7 @@
                     app:standard_btn_icon="@drawable/ic_lock"
                     app:standard_btn_text="Lock" />
 
-                <cls.simplecar.views.StandardButton
+                <cls.android.simplecar.views.StandardButton
                     android:id="@+id/main_unlock_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
             </LinearLayout>
 
 
-            <cls.simplecar.views.CarChargeView
+            <cls.android.simplecar.views.CarChargeView
                 android:id="@+id/car_charge_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -158,7 +158,7 @@
                 android:layout_marginTop="@dimen/margin_1"
                 app:layout_constraintTop_toBottomOf="@id/location_main_fragment" />
 
-            <cls.simplecar.views.CarInfoView
+            <cls.android.simplecar.views.CarInfoView
                 android:id="@+id/car_info_view_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -169,7 +169,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <cls.simplecar.views.LocationView
+            <cls.android.simplecar.views.LocationView
                 android:id="@+id/location_main_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -183,7 +183,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/car_info_view_main" />
 
-            <cls.simplecar.views.MonthlyPlanView
+            <cls.android.simplecar.views.MonthlyPlanView
                 android:id="@+id/monthly_plan_view_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

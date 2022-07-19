@@ -3,7 +3,7 @@ package cls.android.simplecar.api;
 import org.json.JSONArray
 import org.json.JSONObject
 
-class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiResultConversion{
+class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiResultConversion, SmartCarAuthConversion{
     override fun convertLocation(body: String?): Location? {
         var jsonObject = JSONObject(body);
         var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
@@ -59,6 +59,19 @@ class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiR
     override fun convertApiResult(body: String?): Boolean {
         var jsonObject = JSONObject(body);
         return jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
+    }
+
+    override fun convertAuthResult(body: String?) : ApiSmartCarAuthPackage? {
+        var jsonObject = JSONObject(body);
+        var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
+        if (isSuccessful) {
+            var accessToken: String = jsonObject.getString(ApiManager.ACCESS_TOKEN)
+            var refreshToken: String = jsonObject.getString(ApiManager.REFRESH_TOKEN)
+            var authClient: String = jsonObject.getString(ApiManager.AUTH_CLIENT)
+            var auth: String = jsonObject.getString(ApiManager.AUTH)
+            return ApiSmartCarAuthPackage(accessToken,refreshToken,auth,authClient)
+        }
+        return null
     }
 
 }

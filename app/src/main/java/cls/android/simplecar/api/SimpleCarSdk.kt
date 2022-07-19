@@ -6,8 +6,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 class SimpleCarSdk {
+    private var hasFunctionalApiCode: Boolean = true
     private var hasFunctionalAttributes: Boolean = true
     private lateinit var apiCode: String
     private lateinit var smartCarCode: String
@@ -16,9 +18,16 @@ class SimpleCarSdk {
 
     private lateinit var service : ApiService
     constructor(apiCode: String?, smartCarCode : String?, uid : String?){
-       if (apiCode == null || smartCarCode == null || uid == null){
+       if (apiCode != null && (smartCarCode == null || uid == null)){
            hasFunctionalAttributes = false
+           hasFunctionalApiCode = true
+           this.apiCode = apiCode
+
            return
+       }
+       else if(apiCode == null || smartCarCode == null || uid == null){
+           hasFunctionalAttributes = false
+           hasFunctionalApiCode = false
        }
        else {
 
@@ -30,7 +39,8 @@ class SimpleCarSdk {
     }
     init {
         val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
+            .baseUrl("https://pacific-dawn-46907.herokuapp.com/")
+            .addConverterFactory(ScalarsConverterFactory.create())
             .build()
 
         service = retrofit.create(ApiService::class.java)
@@ -124,6 +134,20 @@ class SimpleCarSdk {
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 apiResult.getVehicle(Converter().convertVehicleAttributes(response.body()?.string()))
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                apiResult.exception(Exception(t.message, ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
+
+            }
+
+        })
+
+    }
+    fun getAccessTokenWithAuthToken(token:String,apiResult: ApiAuthPackageCallback) {
+        service.getAccessWithAuthToken(apiCode,token,"NO_ACCOUNT").enqueue(object :
+            Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                apiResult.result(Converter().convertAuthResult(response.body()?.string()))
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 apiResult.exception(Exception(t.message, ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))

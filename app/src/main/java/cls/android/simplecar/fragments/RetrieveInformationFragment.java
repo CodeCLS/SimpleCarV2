@@ -2,6 +2,7 @@ package cls.android.simplecar.fragments;
 
 import cls.android.simplecar.MainActivity;
 import cls.android.simplecar.R;
+import cls.android.simplecar.UserRepository;
 import cls.android.simplecar.api.SimpleCarSdk;
 import cls.android.simplecar.api.Status;
 import cls.android.simplecar.SaveDataTool;
@@ -61,7 +62,6 @@ public class RetrieveInformationFragment extends Fragment {
                 String email = inputEmail.getText().toString();
                 String firstName = inputFirstName.getText().toString();
                 String secondName = inputSurName.getText().toString();
-
                 if(validCellPhone(phone) && validEmail(email) && !firstName.isEmpty() && !secondName.isEmpty()){
                     ((MainActivity)getActivity()).getViewModelCar().signup(phone,
                             email, firstName, secondName, new SimpleCarSdk.OnSimpleCarSignUpFeedback() {
@@ -111,12 +111,18 @@ public class RetrieveInformationFragment extends Fragment {
 
     private void redirect() {
         Purchase purchase = new SaveDataTool(getContext()).getPurchase();
+        if (((MainActivity)getActivity()) == null)
+            return;
         if (purchase == null){
             ((MainActivity)getActivity()).showBilling();
 
         }
-        else{
+        else if(UserRepository.getInstance(getContext()).getUser().getEmail() == null){
             ((MainActivity)getActivity()).connectToCar();
+
+        }
+        else{
+            ((MainActivity)getActivity()).showFragment(new RetrieveInformationFragment());
         }
     }
     public boolean validCellPhone(String number) {
