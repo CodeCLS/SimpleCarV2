@@ -9,14 +9,19 @@ import cls.android.simplecar.api.ApiAuthPackageCallback;
 import cls.android.simplecar.api.ApiResult;
 import cls.android.simplecar.api.ApiSmartCarAuthPackage;
 import cls.android.simplecar.api.Exception;
+import cls.android.simplecar.api.LocationCallback;
+import cls.android.simplecar.api.RangeCallback;
 import cls.android.simplecar.api.SimpleCarSdk;
 import cls.android.simplecar.api.VehicleAttributes;
+import cls.android.simplecar.api.VehicleCallback;
+import cls.android.simplecar.api.VehicleIdListCallback;
 import cls.android.simplecar.database.CarDataBaseRepo;
 import cls.android.simplecar.models.Car;
 import cls.android.simplecar.models.Location;
 import cls.android.simplecar.SmartCarLauncher;
 
 
+import cls.android.simplecar.models.Range;
 import cls.android.simplecar.models.User;
 import cls.android.simplecar.tools.CarAttributesUpdater;
 import cls.android.simplecar.tools.DateUtil;
@@ -100,11 +105,57 @@ public class CarViewModel extends ViewModel {
 
     private void updateAllAttrs(Context context,Car car) {
         Executors.newFixedThreadPool(5).execute(() -> {
-            String code = saveDataTool.get(SaveDataTool.SMARTCAR_ACCESS_KEY, null);
+            updateLocationOfCar(context, car);
+            updateRangeOfCar(context, car);
+
         });
 
     }
 
+    private void updateLocationOfCar(Context context, Car car) {
+        simpleCarSdk.getLocation(car.getSmartCarId(),new LocationCallback() {
+            @Override
+            public void location(@Nullable cls.android.simplecar.api.Location location) {
+                CarDataBaseRepo.getInstance(context).getCarWithSmartCarId(car.getSmartCarId(),
+                        new CarDataBaseRepo.OnRetrieveCar() {
+                    @Override
+                    public void car(Car car) {
+                        if (location != null)
+                            car.setLocation(new Location(location.getLatitude(),location.getLongitude()));
+
+                    }
+                });
+            }
+
+            @Override
+            public void exception(@NonNull Exception exception) {
+                Toast.makeText(context, exception.getMsg(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void updateRangeOfCar(Context context, Car car) {
+        simpleCarSdk.getRange(car.getSmartCarId(),new RangeCallback() {
+            @Override
+            public void range(@Nullable cls.android.simplecar.api.Range range) {
+                CarDataBaseRepo.getInstance(context).getCarWithSmartCarId(car.getSmartCarId(),
+                        new CarDataBaseRepo.OnRetrieveCar() {
+                            @Override
+                            public void car(Car car) {
+                                if (range != null) {
+                                    car.setDriveProductAmountPercent(range.getPercent());
+                                    car.setDriveProductAmount(range.getAmount());
+                                }
+
+                            }
+                        });
+            }
+
+            @Override
+            public void exception(@NonNull Exception exception) {
+                Toast.makeText(context, exception.getMsg(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
     public MutableLiveData<Boolean> getHasAccessAfterCheck(Context context){
@@ -148,6 +199,35 @@ public class CarViewModel extends ViewModel {
                     user.setRefreshTokenSmartCar(packageSmartCar.getRefreshToken());
                     UserRepository.getInstance(context).saveUser(user);
                     getHasAccess().setValue(true);
+
+                    simpleCarSdk.getVehicleIds(new VehicleIdListCallback() {
+                        @Override
+                        public void getVehicles(@Nullable List<String> list) {
+                            if (list != null) {
+                                for (String id: list){
+                                    simpleCarSdk.getVehicleAttributes(id, new VehicleCallback() {
+                                        @Override
+                                        public void getVehicle(@Nullable VehicleAttributes vehicleAttributes) {
+                                            CarDataBaseRepo.getInstance(context)
+                                                    .addCar(new Car.parseCar(vehicleAttributes));
+                                        }
+
+                                        @Override
+                                        public void exception(@NonNull Exception exception) {
+
+                                        }
+                                    });
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void exception(@NonNull Exception exception) {
+                            Log.e(TAG, "exception: "+ exception);
+
+                        }
+                    });
 
                 }
             }

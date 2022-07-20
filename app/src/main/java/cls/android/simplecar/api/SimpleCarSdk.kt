@@ -93,6 +93,7 @@ class SimpleCarSdk {
 
     private val TAG = "SimpleCarSdk"
     fun isTokenValid(apiResult: ApiResult) {
+        Log.d(TAG, "isTokenValid: " + apiCode + " "  + smartCarCode)
         service.isTokenValid(apiCode,smartCarCode,uid).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -107,8 +108,8 @@ class SimpleCarSdk {
         })
 
     }
-    fun getLocation(locationCallback: LocationCallback) {
-        service.getCars(apiCode,smartCarCode,uid).enqueue(object :
+    fun getLocation(id: String,locationCallback: LocationCallback) {
+        service.getVehicleLocation(apiCode,smartCarCode,uid,id).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 locationCallback.location(Converter().convertLocation(response.body()?.string()))

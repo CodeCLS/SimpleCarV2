@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 
+import cls.android.simplecar.api.VehicleAttributes;
 import cls.android.simplecar.tools.DateUtil;
 
 
@@ -203,4 +204,14 @@ public class Car {
     }
 
 
+    public static class parseCar extends Car {
+        public parseCar(VehicleAttributes vehicleAttributes) {
+            Car car = new Car();
+            car.setBrand(vehicleAttributes.getVehicleMake());
+            car.setModel(vehicleAttributes.getVehicleModel());
+            car.setYear(DateUtil.convertYearToLong(vehicleAttributes.getVehicleYear()));
+            car.setSmartCarId(vehicleAttributes.getVehicleId());
+
+        }
+    }
 }
