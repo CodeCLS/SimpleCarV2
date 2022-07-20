@@ -59,11 +59,14 @@ public class CarViewModel extends ViewModel {
 
     }
     public void init(Context context){
+        User user = UserRepository.getInstance(context).getUser();
         saveDataTool = new SaveDataTool(context);
+        if (user != null)
+            hasAccess.setValue(true);
         simpleCarSdk = SimpleCarSdk.Companion.get(
                 Application.getSimpleCarApiCode(),
-                UserRepository.getInstance(context).getUser().getAccessTokenSmartCar(),
-                UserRepository.getInstance(context).getUser().getUidFire()
+                user.getAccessTokenSmartCar(),
+                user.getUidFire()
         );
     }
 
@@ -105,15 +108,17 @@ public class CarViewModel extends ViewModel {
 
 
     public MutableLiveData<Boolean> getHasAccessAfterCheck(Context context){
-        String key = saveDataTool.get(SaveDataTool.SMARTCAR_ACCESS_KEY,null);
-        if (key != null && !key.equals("null")){
+        User user = UserRepository.getInstance(context).getUser();
+        if (user != null && user.getAccessTokenSmartCar() != null){
             hasAccess.setValue(true);
-            //simpleCarSdk.isTokenValid(new ApiResult() {
-            //    @Override
-            //    public void result(@Nullable Boolean result) {
-            //        hasAccess.setValue(result);
-            //    }
-            //});
+            simpleCarSdk.isTokenValid(new ApiResult() {
+                @Override
+                public void result(boolean result) {
+                    hasAccess.setValue(result);
+                    if (!result)
+                        Toast.makeText(context, R.string.access_expired, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         else
             hasAccess.setValue(false);

@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean){
                     redirect();
-
                     viewModelCar.updateCars(getApplicationContext());
                     showFragment(new MainFragment());
                 }

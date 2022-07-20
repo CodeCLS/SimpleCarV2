@@ -29,7 +29,9 @@ public class UserRepository {
     }
     public User getUser(){
         if (saveDataTool.getUser() == null){
-            return new User();
+            User user = new User();
+            saveUser(user);
+            return user;
         }
         return saveDataTool.getUser();
     }

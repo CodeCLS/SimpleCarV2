@@ -1,5 +1,6 @@
 package cls.android.simplecar.api;
 
+import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -55,9 +56,10 @@ class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiR
     }
 
 
-
+    private val TAG = "Converter"
     override fun convertApiResult(body: String?): Boolean {
         var jsonObject = JSONObject(body);
+        Log.d(TAG, "convertApiResult: "+jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION))
         return jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
     }
 

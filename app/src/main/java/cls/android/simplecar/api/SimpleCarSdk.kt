@@ -1,5 +1,7 @@
 package cls.android.simplecar.api;
 
+import android.util.Log
+import cls.android.simplecar.UserRepository
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
@@ -11,13 +13,18 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 class SimpleCarSdk {
     private var hasFunctionalApiCode: Boolean = true
     private var hasFunctionalAttributes: Boolean = true
-    private lateinit var apiCode: String
-    private lateinit var smartCarCode: String
-    private lateinit var uid: String
+    private var apiCode: String?
+    private var smartCarCode: String?
+    private var uid: String?
     private val version : Int = 10//asd
 
     private lateinit var service : ApiService
     constructor(apiCode: String?, smartCarCode : String?, uid : String?){
+        this.apiCode = apiCode
+        this.smartCarCode = smartCarCode
+        this.uid = SimpleCarSdk.NO_ACCOUNT;
+        if (uid != null)
+            this.uid = uid
        if (apiCode != null && (smartCarCode == null || uid == null)){
            hasFunctionalAttributes = false
            hasFunctionalApiCode = true
@@ -29,12 +36,7 @@ class SimpleCarSdk {
            hasFunctionalAttributes = false
            hasFunctionalApiCode = false
        }
-       else {
 
-           this.apiCode = apiCode
-           this.smartCarCode = smartCarCode
-           this.uid = uid
-       }
 
     }
     init {
@@ -50,6 +52,7 @@ class SimpleCarSdk {
     }
 
     public companion object {
+        const val NO_ACCOUNT: String = "NO_ACCOUNT"
         var instance: SimpleCarSdk? = null
         public fun get(apiCode: String?, smartCarCode: String?, uid:String?) : SimpleCarSdk{
             if(instance == null)
@@ -81,6 +84,23 @@ class SimpleCarSdk {
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 rangeCallback.exception(Exception(t.message,ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
+
+            }
+
+        })
+
+    }
+
+    private val TAG = "SimpleCarSdk"
+    fun isTokenValid(apiResult: ApiResult) {
+        service.isTokenValid(apiCode,smartCarCode,uid).enqueue(object :
+            Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                apiResult.result(Converter().convertApiResult(response.body()?.string()))
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.d(TAG, "onFailure: " + t.message)
+                apiResult.result(false)
 
             }
 

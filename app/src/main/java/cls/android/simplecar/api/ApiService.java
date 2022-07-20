@@ -1,6 +1,7 @@
 package cls.android.simplecar.api;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -92,4 +93,9 @@ public interface ApiService {
     Call<ResponseBody> getAccessWithAuthToken(@Header("api-code") String apiCode,
                                   @Header("access-token-smart-car") String token,
                                   @Path("uid") String uid);
-}
+
+
+    @GET("/user/{uid}/validate/smartcar_token")
+    Call<ResponseBody> isTokenValid(@Header("api-code") String apiCode,
+                                              @Header("access-token-smart-car") String token,
+                                              @Path("uid") String uid);}
