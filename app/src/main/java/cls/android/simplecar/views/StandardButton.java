@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +24,10 @@ import cls.android.simplecar.R;
 
 public class StandardButton extends FrameLayout {
     public static final int ENABLED = 1;
-    public static final int DISABLED = 0;
+    public static final int DISABLED = 2;
+    public static final int PASSIVE = 1;
+    private static final long DISABLED_TIME = 5000;
+
 
     private ConstraintLayout parent;
     private ImageView icon;
@@ -128,6 +132,24 @@ public class StandardButton extends FrameLayout {
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
     private void clicked() {
         callOnClick();
+        setClickable(false);
+        setEnabled(false);
+        setFocusable(false);
+        theme(PASSIVE);
+        setAlpha(0.5F);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setClickable(true);
+                setEnabled(true);
+                setFocusable(true);
+                theme(ENABLED);
+                setAlpha(1.0F);
+
+
+
+            }
+        },DISABLED_TIME);
     }
 
     public void setIcon(int btnIcon) {
@@ -145,9 +167,13 @@ public class StandardButton extends FrameLayout {
         if (enabled == ENABLED){
             theme(R.drawable.background_button_standard, R.color.black);
         }
+        else if(enabled == PASSIVE){
+            theme(R.drawable.background_button_passive, R.color.gray_1);
+
+
+        }
         else{
             theme(R.drawable.background_button_standard_pressed, R.color.cultured_white);
-
 
         }
 
@@ -156,4 +182,6 @@ public class StandardButton extends FrameLayout {
     public void setClickableTheme(boolean b) {
         this.clickableTheme = b;
     }
+
+
 }

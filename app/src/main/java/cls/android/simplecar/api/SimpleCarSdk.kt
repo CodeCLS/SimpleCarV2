@@ -137,7 +137,7 @@ class SimpleCarSdk {
 
     }
     fun lockVehicle(id:String,apiResult: ApiResult) {
-        service.lockVehicle(apiCode,smartCarCode,id,uid).enqueue(object :
+        service.lockVehicle(apiCode,smartCarCode,uid,id).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                  apiResult.result(Converter().convertApiResult(response.body()?.string()))

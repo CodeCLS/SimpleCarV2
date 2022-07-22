@@ -2,9 +2,11 @@ package cls.android.simplecar.views;
 
 import cls.android.simplecar.R;
 import cls.android.simplecar.models.Car;
+import cls.android.simplecar.tools.DirectionsTool;
 import cls.android.simplecar.tools.OnCarUpdate;
 
 import android.content.Context;
+import android.location.Location;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -15,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 public class CarInfoView extends FrameLayout implements OnCarUpdate {
     private ImageView carImg;
@@ -63,9 +66,22 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
         post(new Runnable() {
             @Override
             public void run() {
-                range.setText(car.getDriveProductAmount() + "km");
-
+                range.setText(car.getDriveProductAmount() + " km");
                 name.setText(mergeCarTitle(car.getBrand(),car.getName(),car.getModel()));
+                DirectionsTool.getExactLocation(getContext(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        DirectionsTool.getWalkingTime(getContext(),
+                                location, car.getLocation(),
+                                new DirectionsTool.OnRetrieveWalkingTime() {
+                            @Override
+                            public void time(int time) {
+                                timeWalking.setText(Math.round(time/60) + " min");
+                            }
+                        });
+                    }
+                });
+
             }
 
             private String mergeCarTitle(String brand, String name, String model) {
