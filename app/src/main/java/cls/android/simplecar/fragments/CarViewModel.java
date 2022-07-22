@@ -191,6 +191,7 @@ public class CarViewModel extends ViewModel {
         simpleCarSdk.getAccessTokenWithAuthToken(smartcarResponse.getCode(), new ApiAuthPackageCallback() {
             @Override
             public void result(@Nullable ApiSmartCarAuthPackage packageSmartCar) {
+                Log.d(TAG, "result: " +packageSmartCar.getAccessToken());
                 if (packageSmartCar != null){
                     User user = UserRepository.getInstance(context).getUser();
                     user.setAccessTokenSmartCar(packageSmartCar.getAccessToken());
@@ -203,11 +204,15 @@ public class CarViewModel extends ViewModel {
                     simpleCarSdk.getVehicleIds(new VehicleIdListCallback() {
                         @Override
                         public void getVehicles(@Nullable List<String> list) {
+                            Log.d(TAG, "getVehicles: " + list);
                             if (list != null) {
+                                Log.d(TAG, "getVehicles: " + list);
                                 for (String id: list){
+                                    Log.d(TAG, "getVehicles: " + list);
                                     simpleCarSdk.getVehicleAttributes(id, new VehicleCallback() {
                                         @Override
                                         public void getVehicle(@Nullable VehicleAttributes vehicleAttributes) {
+                                            Log.d(TAG, "getVehicle: " + vehicleAttributes);
                                             CarDataBaseRepo.getInstance(context)
                                                     .addCar(new Car.parseCar(vehicleAttributes));
                                         }
@@ -220,6 +225,7 @@ public class CarViewModel extends ViewModel {
 
                                 }
                             }
+                            Log.d(TAG, "getVehicles: null");
                         }
 
                         @Override
