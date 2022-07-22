@@ -140,7 +140,7 @@ class SimpleCarSdk {
         service.lockVehicle(apiCode,smartCarCode,id,uid).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                apiResult.result(Converter().convertApiResult(response.body()?.string()))
+                 apiResult.result(Converter().convertApiResult(response.body()?.string()))
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 apiResult.result(false)

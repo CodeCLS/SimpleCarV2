@@ -59,6 +59,8 @@ class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiR
 
     private val TAG = "Converter"
     override fun convertApiResult(body: String?): Boolean {
+        if (body == null)
+            return false;
         var jsonObject = JSONObject(body);
         Log.d(TAG, "convertApiResult: "+jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION))
         return jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)

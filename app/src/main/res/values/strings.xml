@@ -25,5 +25,7 @@
     <string name="first_name">First name</string>
     <string name="second_name">Second name</string>
     <string name="access_expired">Access Expired</string>
+    <string name="lock_request_send">A lock request has been send</string>
+    <string name="unlock_request_send">An unlock request has been send</string>
 
 </resources>

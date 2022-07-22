@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -135,12 +136,14 @@ public class MainFragment extends Fragment {
                 viewModel.unlockCar(getContext(), new ApiResult() {
                     @Override
                     public void result(boolean result) {
-                        if (result) {
-                            String title = "Unlock";
-                            String desc = "An unlock request has been sent to your car. If your car isn't unlocked within the minute, please try again later or contact support.";
-                            boolean hasButton = true;
-                            Spawner.queueSpawnMessageToast(title, desc, hasButton, view, parent);
-                        }
+                        if (result)
+                            Toast.makeText(getContext(), R.string.unlock_request_send, Toast.LENGTH_SHORT).show();
+                        //if (result) {
+                        //    String title = "Unlock";
+                        //    String desc = "An unlock request has been sent to your car. If your car isn't unlocked within the minute, please try again later or contact support.";
+                        //    boolean hasButton = true;
+                        //    Spawner.queueSpawnMessageToast(title, desc, hasButton, view, parent);
+                        //}
                     }
                 });
             }
@@ -148,6 +151,10 @@ public class MainFragment extends Fragment {
         locationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                redirectToMaps();
+            }
+
+            private void redirectToMaps() {
                 Uri gmmIntentUri = Uri.parse("geo:" + viewModel.getCarMutableLiveData().getValue().getLocation().getLatitude() + " , " + viewModel.getCarMutableLiveData().getValue().getLocation().getLongitude());
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
@@ -159,14 +166,16 @@ public class MainFragment extends Fragment {
         lock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view1) {
-                viewModel.unlockCar(getContext(), new ApiResult() {
+                viewModel.lockCar(getContext(), new ApiResult() {
                     @Override
                     public void result(boolean result) {
-                        if (result) {
-                            String title = "Lock";
-                            String desc = "A lock request has been sent to your car. If your car isn't locked within the minute, please try again later or contact support";
-                            Spawner.queueSpawnMessageToast(title, desc, true, view, parent);
-                        }
+                        if (result)
+                            Toast.makeText(getContext(), R.string.lock_request_send, Toast.LENGTH_SHORT).show();
+                       // if (result) {
+                       //     String title = "Lock";
+                       //     String desc = "A lock request has been sent to your car. If your car isn't locked within the minute, please try again later or contact support";
+                       //     Spawner.queueSpawnMessageToast(title, desc, true, view, parent);
+                       // }
                     }
                 });
 
@@ -181,10 +190,12 @@ public class MainFragment extends Fragment {
         information.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Spawner.spawnMessageToast(
-                //        view,
-                //        "SimpleCar" ,
-                //        "SimpleCar is an app developed by Caleb Seeling in May 2022. It focuses on the attributes of a car. Support: primocaleb@gmail.com ",parent);
+                Spawner.queueSpawnMessageToast(
+                        "SimpleCar" ,
+                        "SimpleCar is an app developed by Caleb Seeling in May 2022. It focuses on the attributes of a car. Support: primocaleb@gmail.com ",
+                        true,
+                        view,
+                        parent);
             }
         });
         viewModel = ((MainActivity)getActivity()).getViewModelCar();
@@ -215,7 +226,6 @@ public class MainFragment extends Fragment {
                     });
                     drawCarOptionView(car, standardButton);
                 }
-                Log.d(TAG, "onChanged: " + carOptionsContainer.getChildCount());
             }
             private String mergeCarTitle(String brand, String name, String model) {
                 boolean isNameEmpty = name.equals("");
@@ -226,7 +236,6 @@ public class MainFragment extends Fragment {
             }
 
             private void drawCarOptionView(Car car, StandardButton standardButton) {
-                Log.d(TAG, "onChanged: "+ car.getBrand() + " " + car.getSmartCarId());
                 standardButton.setText(mergeCarTitle(car.getBrand(),car.getName(),car.getModel()));
                 FrameLayout.LayoutParams layoutparam = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 int margin = getResources().getDimensionPixelSize(R.dimen.margin_regular);
@@ -236,7 +245,7 @@ public class MainFragment extends Fragment {
                 standardButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        viewModel.getCarMutableLiveData().setValue(car);
+                        viewModel.changeSelectedCar(getContext(),car);
                     }
                 });
 
@@ -251,7 +260,7 @@ public class MainFragment extends Fragment {
                     requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            viewModel.getCarMutableLiveData().setValue(cars.get(0));
+                            viewModel.changeSelectedCar(getContext(),cars.get(0));
 
                         }
                     });
@@ -263,6 +272,7 @@ public class MainFragment extends Fragment {
         viewModel.getCarMutableLiveData().observe(getActivity(), new Observer<Car>() {
             @Override
             public void onChanged(Car car) {
+                viewModel.setCurrentCar(car);
                 if (car != null) {
                     updateViews(car);
                 }

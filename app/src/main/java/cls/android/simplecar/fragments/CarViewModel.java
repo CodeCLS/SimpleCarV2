@@ -3,7 +3,6 @@ package cls.android.simplecar.fragments;
 import cls.android.simplecar.Application;
 import cls.android.simplecar.R;
 import cls.android.simplecar.SaveDataTool;
-import cls.android.simplecar.Spawner;
 import cls.android.simplecar.UserRepository;
 import cls.android.simplecar.api.ApiAuthPackageCallback;
 import cls.android.simplecar.api.ApiResult;
@@ -16,12 +15,12 @@ import cls.android.simplecar.api.VehicleAttributes;
 import cls.android.simplecar.api.VehicleCallback;
 import cls.android.simplecar.api.VehicleIdListCallback;
 import cls.android.simplecar.database.CarDataBaseRepo;
+import cls.android.simplecar.database.CarDatabase;
 import cls.android.simplecar.models.Car;
 import cls.android.simplecar.models.Location;
 import cls.android.simplecar.SmartCarLauncher;
 
 
-import cls.android.simplecar.models.Range;
 import cls.android.simplecar.models.User;
 import cls.android.simplecar.tools.CarAttributesUpdater;
 import cls.android.simplecar.tools.DateUtil;
@@ -33,7 +32,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -48,7 +46,7 @@ public class CarViewModel extends ViewModel {
     private static final String TAG = "CarViewModel";
     private SimpleCarSdk simpleCarSdk;
     private SaveDataTool saveDataTool;
-    public MutableLiveData<Car> carMutableLiveData = new MutableLiveData<Car>();
+    public LiveData<Car> carMutableLiveData;
     public LiveData<List<Car>> carsLiveData = new MutableLiveData<List<Car>>();
 
 
@@ -57,6 +55,7 @@ public class CarViewModel extends ViewModel {
     public MutableLiveData<Boolean> hasAccess = new MutableLiveData<>(false);
 
     private SmartCarLauncher launcher;
+    private Car currentCar;
 
     public CarViewModel() {
         launcher = new SmartCarLauncher();
@@ -73,13 +72,25 @@ public class CarViewModel extends ViewModel {
                 user.getAccessTokenSmartCar(),
                 user.getUidFire()
         );
+        carsLiveData = CarDataBaseRepo.getInstance(context).getLiveCars();
+        CarDataBaseRepo.getInstance(context).getCars(new CarDataBaseRepo.OnRetrieveListOfCars() {
+            @Override
+            public void theList(List<Car> cars) {
+                if (cars != null && cars.size() != 0){
+                    carMutableLiveData =
+                            CarDataBaseRepo
+                                    .getInstance(context)
+                                    .getLiveCarWithSmartCarId(cars.get(0).getSmartCarId());
+                }
+            }
+        });
     }
 
     public LiveData<List<Car>> getCarsLiveData() {
         return carsLiveData;
     }
 
-    public MutableLiveData<Car> getCarMutableLiveData() {
+    public LiveData<Car> getCarMutableLiveData() {
         return carMutableLiveData;
     }
 
@@ -120,8 +131,10 @@ public class CarViewModel extends ViewModel {
                         new CarDataBaseRepo.OnRetrieveCar() {
                     @Override
                     public void car(Car car) {
-                        if (location != null)
-                            car.setLocation(new Location(location.getLatitude(),location.getLongitude()));
+                        if (location != null) {
+                            car.setLocation(new Location(location.getLatitude(), location.getLongitude()));
+                            CarDataBaseRepo.getInstance(context).updateCar(car);
+                        }
 
                     }
                 });
@@ -144,6 +157,8 @@ public class CarViewModel extends ViewModel {
                                 if (range != null) {
                                     car.setDriveProductAmountPercent(range.getPercent());
                                     car.setDriveProductAmount(range.getAmount());
+                                    CarDataBaseRepo.getInstance(context).updateCar(car);
+
                                 }
 
                             }
@@ -169,7 +184,7 @@ public class CarViewModel extends ViewModel {
                     if (!result)
                         Toast.makeText(context, R.string.access_expired, Toast.LENGTH_SHORT).show();
                     else
-                        updateCars(context);
+                        updateCarsFromOnline(context);
 
                 }
             });
@@ -189,34 +204,32 @@ public class CarViewModel extends ViewModel {
     public void connect(Context context) {
         launcher.connect(context, smartcarResponse -> updateAccess(smartcarResponse, context));
     }
-    public void updateCars(Context context) {
+    public void updateCarsFromOnline(Context context) {
         simpleCarSdk.getVehicleIds(new VehicleIdListCallback() {
             @Override
             public void getVehicles(@Nullable List<String> list) {
-                Log.d(TAG, "getVehicles1: " + list);
                 if (list != null) {
-                    Log.d(TAG, "getVehicles2: " + list);
                     for (String id: list){
-                        Log.d(TAG, "getVehicles3: " + list);
+                        if (id == null)
+                            return;
+
                         simpleCarSdk.getVehicleAttributes(id, new VehicleCallback() {
                             @Override
                             public void getVehicle(@Nullable VehicleAttributes vehicleAttributes) {
-                                Log.d(TAG, "getVehicle:4 " + vehicleAttributes);
                                 if (vehicleAttributes == null)
                                     return;
-                                Log.d(TAG, "getVehicle:5 " + vehicleAttributes);
                                 CarDataBaseRepo.getInstance(context)
                                         .getCarWithSmartCarId(vehicleAttributes.getVehicleId()
                                                 , new CarDataBaseRepo.OnRetrieveCar() {
                                                     @Override
                                                     public void car(Car car) {
-                                                        Log.d(TAG, "car:123 " + car);
                                                         if (car == null)
                                                             CarDataBaseRepo.getInstance(context)
                                                                     .addCar(Car.parseCar(vehicleAttributes));
                                                         else{
                                                             updateSingleCarVars(context, car);
                                                         }
+
                                                     }
                                                 });
 
@@ -248,8 +261,9 @@ public class CarViewModel extends ViewModel {
                 Log.d(TAG, "result: " +packageSmartCar.getAccessToken());
                 if (packageSmartCar != null){
                     updateUserAccess(packageSmartCar);
+                    updateCarsFromOnline(context);
 
-                    updateCars(context);
+
 
                 }
             }
@@ -278,6 +292,7 @@ public class CarViewModel extends ViewModel {
 
     private void updateSingleCarVars(Context context,Car car) {
         updateLocationOfCar(context,car);
+        updateRangeOfCar(context,car);
     }
 
 
@@ -290,8 +305,8 @@ public class CarViewModel extends ViewModel {
     }
 
     public void unlockCar(Context context,ApiResult apiResult) {
-        if (carMutableLiveData.getValue() != null)
-            simpleCarSdk.unlockVehicle(carMutableLiveData.getValue().getSmartCarId(),apiResult);
+        if (currentCar!= null)
+            simpleCarSdk.unlockVehicle(currentCar.getSmartCarId(),apiResult);
     }
 
     public LiveData<Car> getLiveCarFromDB(Context context, String smartCarId) {
@@ -317,5 +332,17 @@ public class CarViewModel extends ViewModel {
         car.setModel(vehicleAttributes.getVehicleModel());
         car.setYear(DateUtil.convertYearToLong(vehicleAttributes.getVehicleYear()));
         return car;
+    }
+
+    public void changeSelectedCar(Context context,Car car) {
+        carMutableLiveData = CarDataBaseRepo.getInstance(context).getLiveCarWithSmartCarId(car.getSmartCarId());
+    }
+
+    public void setCurrentCar(Car car) {
+        this.currentCar = car;
+    }
+    public void lockCar(Context context,ApiResult apiResult) {
+        if (currentCar!= null)
+            simpleCarSdk.lockVehicle(currentCar.getSmartCarId(),apiResult);
     }
 }

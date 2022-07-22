@@ -59,12 +59,12 @@ public interface ApiService {
                                       @Header("access-token-smart-car") String token,
                                       @Path("uid") String uid,
                                       @Path("id") String id);
-    @GET("user/{uid}/vehicle/{id}/lock")
+    @POST("user/{uid}/vehicle/{id}/lock")
     Call<ResponseBody> lockVehicle(@Header("api-code") String apiCode,
                                    @Header("access-token-smart-car") String token,
                                    @Path("uid") String uid,
                                    @Path("id") String id);
-    @GET("user/{uid}/vehicle/{id}/unlock")
+    @POST("user/{uid}/vehicle/{id}/unlock")
     Call<ResponseBody> unlockVehicle(@Header("api-code") String apiCode,
                                      @Header("access-token-smart-car") String token,
                                      @Path("uid") String uid,

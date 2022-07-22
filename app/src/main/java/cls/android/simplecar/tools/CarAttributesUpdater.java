@@ -23,7 +23,7 @@ public class CarAttributesUpdater {
                         updaterConnection.update();
                         Log.d(TAG, "run:updated ");
                     }
-                }, 0, 360, TimeUnit.SECONDS);
+                }, 0, 600, TimeUnit.SECONDS);
     }
 
 }

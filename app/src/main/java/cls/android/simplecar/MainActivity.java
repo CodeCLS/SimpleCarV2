@@ -13,13 +13,11 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.android.billingclient.api.Purchase;
 
 import cls.android.simplecar.fragments.CarViewModel;
-import cls.android.simplecar.fragments.GooglePayFragment;
 import cls.android.simplecar.fragments.IntroductionFragment;
 import cls.android.simplecar.fragments.MainFragment;
 import cls.android.simplecar.fragments.SplashScreen;
@@ -99,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean){
                     redirect();
-                    viewModelCar.updateCars(getApplicationContext());
+                    viewModelCar.updateCarsFromOnline(getApplicationContext());
                     showFragment(new MainFragment());
                 }
                 else {
