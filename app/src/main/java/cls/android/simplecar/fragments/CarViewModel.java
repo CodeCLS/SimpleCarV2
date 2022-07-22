@@ -168,6 +168,9 @@ public class CarViewModel extends ViewModel {
                     hasAccess.setValue(result);
                     if (!result)
                         Toast.makeText(context, R.string.access_expired, Toast.LENGTH_SHORT).show();
+                    else
+                        updateCars(context);
+
                 }
             });
         }
@@ -186,56 +189,82 @@ public class CarViewModel extends ViewModel {
     public void connect(Context context) {
         launcher.connect(context, smartcarResponse -> updateAccess(smartcarResponse, context));
     }
+    public void updateCars(Context context) {
+        simpleCarSdk.getVehicleIds(new VehicleIdListCallback() {
+            @Override
+            public void getVehicles(@Nullable List<String> list) {
+                Log.d(TAG, "getVehicles1: " + list);
+                if (list != null) {
+                    Log.d(TAG, "getVehicles2: " + list);
+                    for (String id: list){
+                        Log.d(TAG, "getVehicles3: " + list);
+                        simpleCarSdk.getVehicleAttributes(id, new VehicleCallback() {
+                            @Override
+                            public void getVehicle(@Nullable VehicleAttributes vehicleAttributes) {
+                                Log.d(TAG, "getVehicle:4 " + vehicleAttributes);
+                                if (vehicleAttributes == null)
+                                    return;
+                                Log.d(TAG, "getVehicle:5 " + vehicleAttributes);
+                                CarDataBaseRepo.getInstance(context)
+                                        .getCarWithSmartCarId(vehicleAttributes.getVehicleId()
+                                                , new CarDataBaseRepo.OnRetrieveCar() {
+                                                    @Override
+                                                    public void car(Car car) {
+                                                        Log.d(TAG, "car:123 " + car);
+                                                        if (car == null)
+                                                            CarDataBaseRepo.getInstance(context)
+                                                                    .addCar(Car.parseCar(vehicleAttributes));
+                                                        else{
+                                                            updateSingleCarVars(context, car);
+                                                        }
+                                                    }
+                                                });
 
+                            }
+
+                            @Override
+                            public void exception(@NonNull Exception exception) {
+                                Log.e(TAG, "exception: "+ exception );
+
+                            }
+                        });
+
+                    }
+                }
+                Log.d(TAG, "getVehicles: null");
+            }
+
+            @Override
+            public void exception(@NonNull Exception exception) {
+                Log.e(TAG, "exception: "+ exception);
+
+            }
+        });
+    }
     private void updateAccess(SmartcarResponse smartcarResponse, Context context) {
         simpleCarSdk.getAccessTokenWithAuthToken(smartcarResponse.getCode(), new ApiAuthPackageCallback() {
             @Override
             public void result(@Nullable ApiSmartCarAuthPackage packageSmartCar) {
                 Log.d(TAG, "result: " +packageSmartCar.getAccessToken());
                 if (packageSmartCar != null){
-                    User user = UserRepository.getInstance(context).getUser();
-                    user.setAccessTokenSmartCar(packageSmartCar.getAccessToken());
-                    user.setAuthClientSmartCar(packageSmartCar.getAuthClient());
-                    user.setAuthSmartCar(packageSmartCar.getAuth());
-                    user.setRefreshTokenSmartCar(packageSmartCar.getRefreshToken());
-                    UserRepository.getInstance(context).saveUser(user);
-                    getHasAccess().setValue(true);
+                    updateUserAccess(packageSmartCar);
 
-                    simpleCarSdk.getVehicleIds(new VehicleIdListCallback() {
-                        @Override
-                        public void getVehicles(@Nullable List<String> list) {
-                            Log.d(TAG, "getVehicles: " + list);
-                            if (list != null) {
-                                Log.d(TAG, "getVehicles: " + list);
-                                for (String id: list){
-                                    Log.d(TAG, "getVehicles: " + list);
-                                    simpleCarSdk.getVehicleAttributes(id, new VehicleCallback() {
-                                        @Override
-                                        public void getVehicle(@Nullable VehicleAttributes vehicleAttributes) {
-                                            Log.d(TAG, "getVehicle: " + vehicleAttributes);
-                                            CarDataBaseRepo.getInstance(context)
-                                                    .addCar(new Car.parseCar(vehicleAttributes));
-                                        }
-
-                                        @Override
-                                        public void exception(@NonNull Exception exception) {
-
-                                        }
-                                    });
-
-                                }
-                            }
-                            Log.d(TAG, "getVehicles: null");
-                        }
-
-                        @Override
-                        public void exception(@NonNull Exception exception) {
-                            Log.e(TAG, "exception: "+ exception);
-
-                        }
-                    });
+                    updateCars(context);
 
                 }
+            }
+
+
+
+            private void updateUserAccess(@NonNull ApiSmartCarAuthPackage packageSmartCar) {
+                User user = UserRepository.getInstance(context).getUser();
+                user.setAccessTokenSmartCar(packageSmartCar.getAccessToken());
+                user.setAuthClientSmartCar(packageSmartCar.getAuthClient());
+                user.setAuthSmartCar(packageSmartCar.getAuth());
+                user.setRefreshTokenSmartCar(packageSmartCar.getRefreshToken());
+                UserRepository.getInstance(context).saveUser(user);
+                getHasAccess().setValue(true);
+                simpleCarSdk.setSmartCarCode((packageSmartCar.getAccessToken()));
             }
 
             @Override
@@ -247,34 +276,11 @@ public class CarViewModel extends ViewModel {
         });
     }
 
-
-    public void updateCars(Context context) {
-        String code = saveDataTool.get(SaveDataTool.SMARTCAR_ACCESS_KEY,null);
-        //simpleCarSdk.getVehicles(new VehicleCallback() {
-        //                             @Override
-        //                             public void getVehicles(@Nullable List<String> list) {
-        //                                 if (list == null)
-        //                                     return;
-        //                                 for (String id : list){
-        //                                     simpleCarSdk.getVehicleAttributes(id, new VehicleAttributesCallback() {
-        //                                         @Override
-        //                                         public void result(@Nullable VehicleAttributes vehicleAttributes) {
-        //                                             CarDataBaseRepo.getInstance(context).addCar(parseCar(vehicleAttributes));
-        //                                             carMutableLiveData.setValue(null);
-        //                                         }
-        //                                     });
-        //                                 }
-        //                             }
-//
-        //                             @Override
-        //                             public void exception(@NonNull Exception exception) {
-        //                                 Log.e(TAG, "exception: "+exception.getMsg());
-//
-        //                             }
-        //                         });
-        //        carsLiveData = CarDataBaseRepo.getInstance(context).getLiveCars();
-
+    private void updateSingleCarVars(Context context,Car car) {
+        updateLocationOfCar(context,car);
     }
+
+
 
     public void getCarsFromDB(Context context, CarDataBaseRepo.OnRetrieveListOfCars onRetrieveListOfCars) {
         CarDataBaseRepo.getInstance(context).getCars(onRetrieveListOfCars);
@@ -284,9 +290,8 @@ public class CarViewModel extends ViewModel {
     }
 
     public void unlockCar(Context context,ApiResult apiResult) {
-        String code = saveDataTool.get(SaveDataTool.SMARTCAR_ACCESS_KEY,null);
-
-        simpleCarSdk.unlockVehicle(carMutableLiveData.getValue().getSmartCarId(),apiResult);
+        if (carMutableLiveData.getValue() != null)
+            simpleCarSdk.unlockVehicle(carMutableLiveData.getValue().getSmartCarId(),apiResult);
     }
 
     public LiveData<Car> getLiveCarFromDB(Context context, String smartCarId) {

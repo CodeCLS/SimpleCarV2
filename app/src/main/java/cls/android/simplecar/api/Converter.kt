@@ -33,7 +33,8 @@ class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiR
         if (isSuccessful) {
             var jsonArray : JSONArray = jsonObject.getJSONArray(ApiManager.VEHICLE_IDS)
             var list : ArrayList<String> = ArrayList<String>()
-            for (i in 0..jsonArray.length()){
+            Log.d(TAG, "convertVehicleList: " + jsonArray.length())
+            for (i in 0 until (jsonArray.length()-1)){
                 list.add(jsonArray.getString(i))
 
             }

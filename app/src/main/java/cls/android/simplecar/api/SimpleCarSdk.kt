@@ -14,7 +14,7 @@ class SimpleCarSdk {
     private var hasFunctionalApiCode: Boolean = true
     private var hasFunctionalAttributes: Boolean = true
     private var apiCode: String?
-    private var smartCarCode: String?
+    var smartCarCode: String?
     private var uid: String?
     private val version : Int = 10//asd
 
@@ -77,7 +77,7 @@ class SimpleCarSdk {
 
 
     fun getRange(id : String,rangeCallback: RangeCallback) {
-        service.getVehicleRange(apiCode,smartCarCode,id,uid).enqueue(object :
+        service.getVehicleRange(apiCode,smartCarCode,uid,id).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 rangeCallback.range(Converter().convertRange(response.body()?.string()))
@@ -123,7 +123,7 @@ class SimpleCarSdk {
 
     }
     fun unlockVehicle(id:String,apiResult: ApiResult) {
-        service.unlockVehicle(apiCode,smartCarCode,id,uid).enqueue(object :
+        service.unlockVehicle(apiCode,smartCarCode,uid,id).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 apiResult.result(Converter().convertApiResult(response.body()?.string()))
@@ -151,7 +151,7 @@ class SimpleCarSdk {
 
     }
     fun getVehicleAttributes(id:String,apiResult: VehicleCallback) {
-        service.getVehicleAttributes(apiCode,smartCarCode,id,uid).enqueue(object :
+        service.getVehicleAttributes(apiCode,smartCarCode,uid,id).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 apiResult.getVehicle(Converter().convertVehicleAttributes(response.body()?.string()))
