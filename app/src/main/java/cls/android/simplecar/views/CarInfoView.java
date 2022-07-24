@@ -8,6 +8,7 @@ import cls.android.simplecar.tools.OnCarUpdate;
 import android.content.Context;
 import android.location.Location;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -74,9 +75,16 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
                         DirectionsTool.getWalkingTime(getContext(),
                                 location, car.getLocation(),
                                 new DirectionsTool.OnRetrieveWalkingTime() {
+                                    private static final String TAG = "CarInfoView";
                             @Override
                             public void time(int time) {
-                                timeWalking.setText(Math.round(time/60) + " min");
+                                if (time < 1){
+                                    timeWalking.setText("Unavailable");
+                                }
+                                else {
+                                    Log.d(TAG, "time: " + time);
+                                    timeWalking.setText(Math.round(time / 60) + " min");
+                                }
                             }
                         });
                     }

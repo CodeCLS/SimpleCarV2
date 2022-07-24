@@ -16,6 +16,8 @@ import cls.android.simplecar.views.MonthlyPlanView;
 import cls.android.simplecar.views.StandardButton;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -88,6 +90,8 @@ public class MainFragment extends Fragment {
 
         unlock = view.findViewById(R.id.main_unlock_btn);
         lock = view.findViewById(R.id.main_lock_btn);
+        unlock.setHasTemporarelyCancelledFucntion(true);
+        lock.setHasTemporarelyCancelledFucntion(true);
         MapsInitializer.initialize(getContext());
         carOptionsContainer = view.findViewById(R.id.car_list_linearlayout);
 
@@ -102,6 +106,12 @@ public class MainFragment extends Fragment {
         carInfoView = view.findViewById(R.id.car_info_view_main);
         carChargeView = view.findViewById(R.id.car_charge_view);
         monthlyPlanView = view.findViewById(R.id.monthly_plan_view_main);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            monthlyPlanView.setAlpha(0.5F);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                monthlyPlanView.setForegroundTintList(ColorStateList.valueOf(Color.GRAY));
+            }
+        }
 
         information = view.findViewById(R.id.standard_button_information);
         notifications = view.findViewById(R.id.standard_button_notifications);

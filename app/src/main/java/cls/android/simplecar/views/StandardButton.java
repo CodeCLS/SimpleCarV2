@@ -83,6 +83,10 @@ public class StandardButton extends FrameLayout {
         textView.setText(text);
     }
 
+    public void setHasTemporarelyCancelledFucntion(boolean hasTemporarelyCancelledFucntion) {
+        this.hasTemporarelyCancelledFucntion = hasTemporarelyCancelledFucntion;
+    }
+
     private static final String TAG = "StandardButton";
     Float firstTouchX = null;
     Float firstTouchY = null;

@@ -26,32 +26,7 @@ public class DirectionsTool {
     private static final String TAG = "DirectionsTool";
 
     public static void getExactLocation(Context context, OnSuccessListener<? super Location> listener){
-        //ActivityResultLauncher<String[]> locationPermissionRequest =
-        //        registerForActivityResult(new ActivityResultContracts
-        //                        .RequestMultiplePermissions(), result -> {
-        //                    Boolean fineLocationGranted = result.getOrDefault(
-        //                            Manifest.permission.ACCESS_FINE_LOCATION, false);
-        //                    Boolean coarseLocationGranted = result.getOrDefault(
-        //                            Manifest.permission.ACCESS_COARSE_LOCATION,false);
-        //                    if (fineLocationGranted != null && fineLocationGranted) {
-        //                        // Precise location access granted.
-        //                    } else if (coarseLocationGranted != null && coarseLocationGranted) {
-        //                        // Only approximate location access granted.
-        //                    } else {
-        //                        // No location access granted.
-        //                    }
-        //                }
-        //        );
-//
-// ...//
-//
-// Befor//e you perform the actual permission request, check whether your app
-// alrea//dy has the permissions, and whether your app needs to show a permission
-// ratio//nale dialog. For more details, see Request permissions.
-        //locationPermissionRequest.launch(new String[] {
-        //        Manifest.permission.ACCESS_FINE_LOCATION,
-        //        Manifest.permission.ACCESS_COARSE_LOCATION
-        //});
+
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         fusedLocationClient.getLastLocation().addOnSuccessListener(listener);
 
@@ -74,6 +49,7 @@ public class DirectionsTool {
                     public void onResponse(String response) {
                         if (response != null){
                             try {
+                                Log.d(TAG, "onResponse: " + response);
                                 JSONObject jsonObject = new JSONObject(response);
                                 int duration = jsonObject.getJSONArray("routes")
                                         .getJSONObject(0)
