@@ -13,9 +13,9 @@ public class CarAttributesUpdater {
     public CarAttributesUpdater(UpdaterConnection updaterConnection) {
         this.updaterConnection = updaterConnection;
     }
-    public void run(){
+    public ScheduledExecutorService run(){
         ScheduledExecutorService scheduler =
-                Executors.newScheduledThreadPool(5);
+                Executors.newSingleThreadScheduledExecutor();
 
         scheduler.scheduleAtFixedRate
                 (new Runnable() {
@@ -24,6 +24,7 @@ public class CarAttributesUpdater {
                         Log.d(TAG, "run:updated ");
                     }
                 }, 0, 600, TimeUnit.SECONDS);
+        return scheduler;
     }
 
 }

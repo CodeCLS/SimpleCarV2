@@ -273,7 +273,7 @@ public class MainFragment extends Fragment {
         viewModel.getCarMutableLiveData().observe(getActivity(), new Observer<Car>() {
             @Override
             public void onChanged(Car car) {
-                viewModel.setCurrentCar(car);
+                Log.d(TAG, "onChanged123: " +car);
                 if (car != null) {
                     updateViews(car);
                 }

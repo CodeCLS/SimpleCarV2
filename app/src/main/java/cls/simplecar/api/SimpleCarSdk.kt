@@ -178,6 +178,21 @@ class SimpleCarSdk {
         })
 
     }
+    fun refreshToken(auth:String, authClient:String,apiResult: ApiAuthPackageCallback) {
+        service.refreshToken(apiCode,smartCarCode,"NO_ACCOUNT",auth,authClient).enqueue(object :
+            Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Log.d(TAG, "onResponse123: " + call.toString())
+                apiResult.result(Converter().convertAuthResult(response.body()?.string()))
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                apiResult.exception(Exception(t.message, ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
+
+            }
+
+        })
+
+    }
 
 
     fun signup(
