@@ -18,7 +18,6 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cls.android.simplecar.Manifest;
 
 
 public class DirectionsTool {

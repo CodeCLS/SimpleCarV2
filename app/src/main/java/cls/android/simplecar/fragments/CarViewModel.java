@@ -15,7 +15,6 @@ import cls.android.simplecar.api.VehicleAttributes;
 import cls.android.simplecar.api.VehicleCallback;
 import cls.android.simplecar.api.VehicleIdListCallback;
 import cls.android.simplecar.database.CarDataBaseRepo;
-import cls.android.simplecar.database.CarDatabase;
 import cls.android.simplecar.models.Car;
 import cls.android.simplecar.models.Location;
 import cls.android.simplecar.SmartCarLauncher;
@@ -46,13 +45,14 @@ public class CarViewModel extends ViewModel {
     private static final String TAG = "CarViewModel";
     private SimpleCarSdk simpleCarSdk;
     private SaveDataTool saveDataTool;
-    public LiveData<Car> carMutableLiveData;
+    public LiveData<Car> carMutableLiveData = new MutableLiveData<>();
     public LiveData<List<Car>> carsLiveData = new MutableLiveData<List<Car>>();
 
 
     public MutableLiveData<Location> monthlySubscriptionMutableLiveData = new MutableLiveData<>();
     public MutableLiveData<Boolean> isNotificationsEnabled = new MutableLiveData<>();
-    public MutableLiveData<Boolean> hasAccess = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> hasSmartCarAccess = new MutableLiveData<>(true);
+    public MutableLiveData<Boolean> hasSimpleCarAccess = new MutableLiveData<>(true);
 
     private SmartCarLauncher launcher;
     private Car currentCar;
@@ -62,17 +62,32 @@ public class CarViewModel extends ViewModel {
 
 
     }
+
+    public MutableLiveData<Boolean> getHasSimpleCarAccess() {
+        return hasSimpleCarAccess;
+    }
+
     public void init(Context context){
+        carsLiveData = CarDataBaseRepo.getInstance(context).getLiveCars();
         User user = UserRepository.getInstance(context).getUser();
         saveDataTool = new SaveDataTool(context);
-        if (user != null)
-            hasAccess.setValue(true);
+        String accessTokenSmartCar = "";
+        String uid = "";
+        if (user != null) {
+            accessTokenSmartCar = user.getAccessTokenSmartCar();
+            uid = user.getUidFire();
+            hasSimpleCarAccess.setValue(true);
+        }
+        else {
+            hasSimpleCarAccess.setValue(false);
+            Log.d(TAG, "getHasSmartCarAccessAfterCheckfalse ");
+        }
+
         simpleCarSdk = SimpleCarSdk.Companion.get(
                 Application.getSimpleCarApiCode(),
-                user.getAccessTokenSmartCar(),
-                user.getUidFire()
-        );
-        carsLiveData = CarDataBaseRepo.getInstance(context).getLiveCars();
+                accessTokenSmartCar,
+                uid);
+
         CarDataBaseRepo.getInstance(context).getCars(new CarDataBaseRepo.OnRetrieveListOfCars() {
             @Override
             public void theList(List<Car> cars) {
@@ -173,14 +188,15 @@ public class CarViewModel extends ViewModel {
     }
 
 
-    public MutableLiveData<Boolean> getHasAccessAfterCheck(Context context){
+    public LiveData<Boolean> getHasSmartCarAccessAfterCheck(Context context){
         User user = UserRepository.getInstance(context).getUser();
+        Log.d(TAG, "getHasSmartCarAccessAfterCheck: " + user.getAccessTokenSmartCar() );
         if (user != null && user.getAccessTokenSmartCar() != null){
-            hasAccess.setValue(true);
+            hasSmartCarAccess.setValue(true);
             simpleCarSdk.isTokenValid(new ApiResult() {
                 @Override
                 public void result(boolean result) {
-                    hasAccess.setValue(result);
+                    hasSmartCarAccess.setValue(result);
                     if (!result)
                         Toast.makeText(context, R.string.access_expired, Toast.LENGTH_SHORT).show();
                     else
@@ -189,15 +205,17 @@ public class CarViewModel extends ViewModel {
                 }
             });
         }
-        else
-            hasAccess.setValue(false);
+        else {
+            Log.d(TAG, "getHasSmartCarAccessAfterCheck:false ");
+            hasSmartCarAccess.setValue(false);
+        }
 
 
-        return hasAccess;
+        return hasSmartCarAccess;
 
     }
-    public MutableLiveData<Boolean> getHasAccess() {
-        return hasAccess;
+    public MutableLiveData<Boolean> getHasSmartCarAccess() {
+        return hasSmartCarAccess;
     }
 
 
@@ -272,12 +290,18 @@ public class CarViewModel extends ViewModel {
 
             private void updateUserAccess(@NonNull ApiSmartCarAuthPackage packageSmartCar) {
                 User user = UserRepository.getInstance(context).getUser();
+                if (user == null) {
+                    Log.d(TAG, "getHasSmartCarAccessAfterCheckfalse ");
+                    hasSimpleCarAccess.setValue(false);
+                    hasSmartCarAccess.setValue(false);
+                    return;
+                }
                 user.setAccessTokenSmartCar(packageSmartCar.getAccessToken());
                 user.setAuthClientSmartCar(packageSmartCar.getAuthClient());
                 user.setAuthSmartCar(packageSmartCar.getAuth());
                 user.setRefreshTokenSmartCar(packageSmartCar.getRefreshToken());
                 UserRepository.getInstance(context).saveUser(user);
-                getHasAccess().setValue(true);
+                getHasSmartCarAccess().setValue(true);
                 simpleCarSdk.setSmartCarCode((packageSmartCar.getAccessToken()));
             }
 
@@ -322,6 +346,8 @@ public class CarViewModel extends ViewModel {
 
     public void saveUser(Context context,User parseUser) {
         UserRepository.getInstance(context).saveUser(parseUser);
+        hasSimpleCarAccess.setValue(true);
+        Log.d(TAG, "saveUser: true");
     }
     public static Car parseCar(VehicleAttributes vehicleAttributes) {
         if (vehicleAttributes== null)

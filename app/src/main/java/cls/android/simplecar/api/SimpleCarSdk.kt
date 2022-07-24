@@ -190,19 +190,22 @@ class SimpleCarSdk {
         val jsonObject = JSONObject()
         jsonObject.put(ApiManager.PHONE,phone)
         jsonObject.put(ApiManager.EMAIL,email)
-
         jsonObject.put(ApiManager.FIRST_NAME,firstName)
         jsonObject.put(ApiManager.SECOND_NAME,secondName)
+        Log.d(TAG, "signup: $jsonObject")
 
         service.signup(apiCode,smartCarCode,jsonObject.toString()).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                simpleCarSignUpFeedback.result(Converter().convertApiResult(response.body()?.string()),
-                    Status()
+                var body: String? = response.body()?.string()
+                var resultApi : Boolean = Converter().convertApiResult(body)
+                simpleCarSignUpFeedback.result(resultApi,
+                    Status(resultApi,-1,Converter().convertAdditional("user",body))
                 )
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 simpleCarSignUpFeedback.result(false,Status())
+                Log.e(TAG, "onFailure: " + t.message )
 
             }
 

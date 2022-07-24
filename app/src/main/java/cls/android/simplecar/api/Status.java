@@ -6,13 +6,11 @@ import org.json.JSONObject;
 
 public class Status {
     private boolean isSuccessfulAction;
-    private boolean isSuccessfulConnection;
     private int errorCode;
     private JSONObject additionalInformation;
 
-    public Status(boolean isSuccessfulAction, boolean isSuccessfulConnection, int errorCode, JSONObject additionalInformation) {
+    public Status(boolean isSuccessfulAction, int errorCode, JSONObject additionalInformation) {
         this.isSuccessfulAction = isSuccessfulAction;
-        this.isSuccessfulConnection = isSuccessfulConnection;
         this.errorCode = errorCode;
         this.additionalInformation = additionalInformation;
     }
@@ -28,13 +26,7 @@ public class Status {
         isSuccessfulAction = successfulAction;
     }
 
-    public boolean isSuccessfulConnection() {
-        return isSuccessfulConnection;
-    }
 
-    public void setSuccessfulConnection(boolean successfulConnection) {
-        isSuccessfulConnection = successfulConnection;
-    }
 
     public int getErrorCode() {
         return errorCode;

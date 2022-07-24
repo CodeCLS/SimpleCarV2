@@ -40,6 +40,7 @@ public class IntroductionSliderFragment extends Fragment {
 
         if (nextPos>2)
             ((MainActivity)getActivity()).connectToCar();
+            //((MainActivity)getActivity()).showFragment(new RetrieveInformationFragment());
         viewPager2.setCurrentItem(nextPos);
 
     }

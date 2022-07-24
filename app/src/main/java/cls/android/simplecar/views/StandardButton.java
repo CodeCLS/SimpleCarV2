@@ -35,6 +35,8 @@ public class StandardButton extends FrameLayout {
     private int iconReference = -1;
     private String text = "";
     private boolean clickableTheme = true;
+    private boolean isDisabled = false;
+    private boolean hasTemporarelyCancelledFucntion = false;
 
     public StandardButton(@NonNull Context context) {
         super(context);
@@ -131,21 +133,28 @@ public class StandardButton extends FrameLayout {
 
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
     private void clicked() {
+        if (isDisabled)
+            return;
         callOnClick();
-        setClickable(false);
-        setEnabled(false);
-        setFocusable(false);
-        theme(PASSIVE);
-        setAlpha(0.5F);
+        if (hasTemporarelyCancelledFucntion) {
+            setClickable(false);
+            setEnabled(false);
+            setFocusable(false);
+            theme(PASSIVE);
+            setAlpha(0.5F);
+            isDisabled = true;
+        }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                setClickable(true);
-                setEnabled(true);
-                setFocusable(true);
-                theme(ENABLED);
-                setAlpha(1.0F);
-
+                if (hasTemporarelyCancelledFucntion) {
+                    isDisabled = false;
+                    setClickable(true);
+                    setEnabled(true);
+                    setFocusable(true);
+                    theme(ENABLED);
+                    setAlpha(1.0F);
+                }
 
 
             }

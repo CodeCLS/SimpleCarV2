@@ -12,6 +12,7 @@ import cls.android.simplecar.views.StandardButton;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ public class RetrieveInformationFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_additional_info,container,false);
     }
 
+    private static final String TAG = "RetrieveInformationFrag";
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -47,7 +49,6 @@ public class RetrieveInformationFragment extends Fragment {
         inputFirstName = view.findViewById(R.id.input_additional_info_first_name_fragment_view);
         inputSurName = view.findViewById(R.id.input_additional_info_second_name_fragment_view);
 
-        redirect();
 
 
 
@@ -67,33 +68,30 @@ public class RetrieveInformationFragment extends Fragment {
                             email, firstName, secondName, new SimpleCarSdk.OnSimpleCarSignUpFeedback() {
                                 @Override
                                 public void result(boolean apiResponse, @NonNull Status status) {
-                                    if (true){
-                                        if(apiResponse){
-                                            ((MainActivity)getActivity()).getViewModelCar().saveUser(getContext(),
-                                                    new JsonUtil().parseUser(status.getAdditionalInformation()));
-                                            redirect();
+                                    if(apiResponse){
+                                        Log.d(TAG, "result: ");
+                                        ((MainActivity)getActivity()).getViewModelCar().saveUser(getContext(),
+                                                new JsonUtil().parseUser(status.getAdditionalInformation()));
+                                    }
+                                    else{
+                                        if (status.getErrorCode() == ApiErrorManager.API_INTERNAL_ERROR){
+                                            Toast.makeText(getContext(), R.string.internal_error, Toast.LENGTH_SHORT).show();
 
                                         }
-                                        else{
-                                            if (status.getErrorCode() == ApiErrorManager.API_INTERNAL_ERROR){
-                                                Toast.makeText(getContext(), R.string.internal_error, Toast.LENGTH_SHORT).show();
+                                        if (status.getErrorCode() == ApiErrorManager.API_EMAIL_ERROR){
+                                            Toast.makeText(getContext(), R.string.email_error_signup, Toast.LENGTH_SHORT).show();
 
-                                            }
-                                            if (status.getErrorCode() == ApiErrorManager.API_EMAIL_ERROR){
-                                                Toast.makeText(getContext(), R.string.email_error_signup, Toast.LENGTH_SHORT).show();
-
-
-                                            }
-                                            if (status.getErrorCode() == ApiErrorManager.API_PHONE_ERROR){
-                                                Toast.makeText(getContext(), R.string.phone_error_signup, Toast.LENGTH_SHORT).show();
-
-                                            }
-                                            if (status.getErrorCode() == ApiErrorManager.API_NAME_ERROR){
-                                                Toast.makeText(getContext(), R.string.name_error_signup, Toast.LENGTH_SHORT).show();
-
-                                            }
 
                                         }
+                                        if (status.getErrorCode() == ApiErrorManager.API_PHONE_ERROR){
+                                            Toast.makeText(getContext(), R.string.phone_error_signup, Toast.LENGTH_SHORT).show();
+
+                                        }
+                                        if (status.getErrorCode() == ApiErrorManager.API_NAME_ERROR){
+                                            Toast.makeText(getContext(), R.string.name_error_signup, Toast.LENGTH_SHORT).show();
+
+                                        }
+
                                     }
 
                                 }
@@ -109,22 +107,7 @@ public class RetrieveInformationFragment extends Fragment {
         });
     }
 
-    private void redirect() {
-        Purchase purchase = new SaveDataTool(getContext()).getPurchase();
-        if (((MainActivity)getActivity()) == null)
-            return;
-        if (purchase == null){
-            ((MainActivity)getActivity()).showBilling();
 
-        }
-        else if(UserRepository.getInstance(getContext()).getUser().getEmail() == null){
-            ((MainActivity)getActivity()).connectToCar();
-
-        }
-        else{
-            ((MainActivity)getActivity()).showFragment(new RetrieveInformationFragment());
-        }
-    }
     public boolean validCellPhone(String number) {
         return android.util.Patterns.PHONE.matcher(number).matches();
     }

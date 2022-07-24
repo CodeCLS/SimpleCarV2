@@ -84,7 +84,6 @@ public interface ApiService {
             @Header("access-token-smart-car") String token,
             @Path("uid") String uid);
     @POST("user/")
-    @FormUrlEncoded
     Call<ResponseBody> signup(@Header("api-code") String apiCode,
                               @Header("access-token-smart-car") String token,
                               @Body String body);

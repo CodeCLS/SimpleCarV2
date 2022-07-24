@@ -13,12 +13,15 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.android.billingclient.api.Purchase;
 
 import cls.android.simplecar.fragments.CarViewModel;
+import cls.android.simplecar.fragments.GooglePayFragment;
 import cls.android.simplecar.fragments.IntroductionFragment;
+import cls.android.simplecar.fragments.IntroductionSliderFragment;
 import cls.android.simplecar.fragments.MainFragment;
 import cls.android.simplecar.fragments.SplashScreen;
 import cls.android.simplecar.tools.BillingTool;
@@ -40,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         showSplash();
         savedInstance = savedInstanceState;
         initViewModel();
+        getPermissions();
+        observe();
 
         //getPermissions();
 
@@ -65,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                observe();
+                //showFragment(new IntroductionSliderFragment());
 
             }
         },CONSTANT_SPLASH_SCREEN_TIME);
@@ -84,28 +89,55 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void redirect() {
-        Purchase purchase = BillingTool.getInstance().getPurchase();
-        if (purchase == null){
-            showBilling();
-            return;
-        }
+        showFragment(new MainFragment());
+
+        //Purchase purchase = BillingTool.getInstance().getPurchase();
+        //if (purchase == null){
+        //    showBilling();
+        //    return;
+        //}
+        //else{
+        //    showFragment(new MainFragment());
+//
+        //}
 
     }
     private void observe() {
-        viewModelCar.getHasAccessAfterCheck(this).observe(this, new Observer<Boolean>() {
+        viewModelCar.getHasSmartCarAccessAfterCheck(this).observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+                Log.d(TAG, "onChanged: " + aBoolean);
                 if (aBoolean){
-                    redirect();
-                    viewModelCar.updateCarsFromOnline(getApplicationContext());
-                    showFragment(new MainFragment());
+                    //if (Boolean.FALSE.equals(viewModelCar.hasSimpleCarAccess.getValue())){
+                    //    showFragment(new IntroductionFragment());
+                    //}
+                    //else {
+                        redirect();
+                        viewModelCar.updateCarsFromOnline(getApplicationContext());
+                    //}
                 }
                 else {
-                    //TODO has aldready done introduction?
                     showFragment(new IntroductionFragment());
                 }
             }
         });
+        //viewModelCar.getHasSimpleCarAccess().observe(this, new Observer<Boolean>() {
+        //    @Override
+        //    public void onChanged(Boolean aBoolean) {
+        //        if (aBoolean){
+        //            if (Boolean.FALSE.equals(viewModelCar.hasSmartCarAccess.getValue())){
+        //                viewModelCar.connect(MainActivity.this);
+        //            }
+        //            else {
+        //                redirect();
+        //                viewModelCar.updateCarsFromOnline(getApplicationContext());
+        //            }
+        //        }
+        //        else {
+        //            showFragment(new IntroductionFragment());
+        //        }
+        //    }
+        //});
     }
 
 
@@ -131,6 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void showBilling() {
         //TODO change this
-        //showFragment(new GooglePayFragment());
+        showFragment(new GooglePayFragment());
     }
 }

@@ -28,11 +28,12 @@ public class UserRepository {
         saveDataTool.saveUser(parseUser);
     }
     public User getUser(){
-        if (saveDataTool.getUser() == null){
-            User user = new User();
-            saveUser(user);
-            return user;
+        User user = saveDataTool.getUser();
+
+        if (user == null) {
+            user = new User();
+            saveDataTool.saveUser(user);
         }
-        return saveDataTool.getUser();
+        return user;
     }
 }

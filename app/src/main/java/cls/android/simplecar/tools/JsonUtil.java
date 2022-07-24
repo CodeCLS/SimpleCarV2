@@ -1,5 +1,6 @@
 package cls.android.simplecar.tools;
 
+import cls.android.simplecar.api.ApiManager;
 import cls.android.simplecar.models.Car;
 import cls.android.simplecar.models.Location;
 import cls.android.simplecar.models.Range;
@@ -135,8 +136,7 @@ public class JsonUtil {
         try {
             jsonObject = new JSONObject(body);
             status.setErrorCode(jsonObject.getInt("error_code"));
-            status.setSuccessfulAction(jsonObject.getBoolean("is_successful_action"));
-            status.setSuccessfulConnection(jsonObject.getBoolean("is_successful_connection"));
+            status.setSuccessfulAction(jsonObject.getBoolean("successful_action"));
             status.setAdditionalInformation(new JSONObject(jsonObject.getString("additional_information")));
 
         } catch (JSONException e) {
@@ -148,8 +148,15 @@ public class JsonUtil {
 
     public User parseUser(JSONObject additionalInformation) {
         User user = new User();
-        JSONObject jsonObject = new JSONObject();
-
-        return null;
+        Log.d(TAG, "parseUser: " + additionalInformation);
+        try {
+            user.setFirstName(additionalInformation.getString(ApiManager.Companion.getFIRST_NAME()));
+            user.setSecondName(additionalInformation.getString(ApiManager.Companion.getFIRST_NAME()));
+            user.setEmail(additionalInformation.getString(ApiManager.Companion.getEMAIL()));
+            user.setPhone(additionalInformation.getInt(ApiManager.Companion.getPHONE()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 }

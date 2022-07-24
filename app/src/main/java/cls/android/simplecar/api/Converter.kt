@@ -28,6 +28,8 @@ class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiR
     }
 
     override fun convertVehicleList(body: String?): List<String>? {
+        if (body == null)
+            return null
         var jsonObject = JSONObject(body);
         var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
         if (isSuccessful) {
@@ -64,6 +66,10 @@ class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiR
         var jsonObject = JSONObject(body);
         Log.d(TAG, "convertApiResult: "+jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION))
         return jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
+    }
+
+    override fun convertAdditional(parent: String?, body: String?) : JSONObject {
+        return JSONObject(body).getJSONObject(parent)
     }
 
     override fun convertAuthResult(body: String?) : ApiSmartCarAuthPackage? {

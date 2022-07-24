@@ -255,22 +255,6 @@ public class MainFragment extends Fragment {
             }
         });
         viewModel.startUpdatingAttrs(getContext());
-        viewModel.getCarsFromDB(getContext(), new CarDataBaseRepo.OnRetrieveListOfCars() {
-            @Override
-            public void theList(List<Car> cars) {
-                if (cars != null && cars.size() != 0 && cars.get(0) != null)
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            viewModel.changeSelectedCar(getContext(),cars.get(0));
-
-                        }
-                    });
-
-
-            }
-        });
-
         viewModel.getCarMutableLiveData().observe(getActivity(), new Observer<Car>() {
             @Override
             public void onChanged(Car car) {
