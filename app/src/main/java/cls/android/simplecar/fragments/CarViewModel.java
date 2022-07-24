@@ -190,7 +190,6 @@ public class CarViewModel extends ViewModel {
 
     public LiveData<Boolean> getHasSmartCarAccessAfterCheck(Context context){
         User user = UserRepository.getInstance(context).getUser();
-        Log.d(TAG, "getHasSmartCarAccessAfterCheck: " + user.getAccessTokenSmartCar() );
         if (user != null && user.getAccessTokenSmartCar() != null){
             hasSmartCarAccess.setValue(true);
             simpleCarSdk.isTokenValid(new ApiResult() {
@@ -206,7 +205,6 @@ public class CarViewModel extends ViewModel {
             });
         }
         else {
-            Log.d(TAG, "getHasSmartCarAccessAfterCheck:false ");
             hasSmartCarAccess.setValue(false);
         }
 
@@ -241,9 +239,20 @@ public class CarViewModel extends ViewModel {
                                                 , new CarDataBaseRepo.OnRetrieveCar() {
                                                     @Override
                                                     public void car(Car car) {
-                                                        if (car == null)
+                                                        if (car == null) {
                                                             CarDataBaseRepo.getInstance(context)
                                                                     .addCar(Car.parseCar(vehicleAttributes));
+                                                            CarDataBaseRepo.getInstance(context).getCars(new CarDataBaseRepo.OnRetrieveListOfCars() {
+                                                                @Override
+                                                                public void theList(List<Car> cars) {
+                                                                    if (cars != null && cars.size() != 0)
+                                                                        carMutableLiveData = CarDataBaseRepo.getInstance(context).getLiveCarWithSmartCarId(cars.get(0).getSmartCarId());
+                                                                }
+                                                            });
+                                                        }
+
+
+
                                                         else{
                                                             updateSingleCarVars(context, car);
                                                         }

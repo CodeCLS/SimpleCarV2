@@ -107,7 +107,7 @@ public class MainFragment extends Fragment {
         carChargeView = view.findViewById(R.id.car_charge_view);
         monthlyPlanView = view.findViewById(R.id.monthly_plan_view_main);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            monthlyPlanView.setAlpha(0.5F);
+            monthlyPlanView.setAlpha(0.2F);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 monthlyPlanView.setForegroundTintList(ColorStateList.valueOf(Color.GRAY));
             }

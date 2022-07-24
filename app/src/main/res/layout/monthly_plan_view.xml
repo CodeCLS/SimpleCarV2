@@ -19,7 +19,7 @@
         android:id="@+id/txt_name_main_monthly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Caleb Seeling"
+        android:text="User"
         android:fontFamily="@font/montserrat_medium"
         android:textColor="@color/textActive"
         android:textSize="@dimen/text_size_1"

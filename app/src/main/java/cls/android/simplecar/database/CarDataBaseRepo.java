@@ -40,7 +40,7 @@ public class CarDataBaseRepo {
 
     }
     public void getCars(OnRetrieveListOfCars onRetrieveListOfCars){
-        executorService.execute(new Runnable() {
+        executorService.submit(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "run: ");
