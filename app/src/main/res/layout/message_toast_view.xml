@@ -36,7 +36,7 @@
         android:layout_margin="@dimen/margin_1"
         app:layout_constraintBottom_toTopOf="@id/message_toast_btn"
         android:textColor="@color/black" />
-    <cls.android.simplecar.views.StandardButton
+    <cls.simplecar.views.StandardButton
         android:id="@+id/message_toast_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
