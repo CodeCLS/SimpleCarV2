@@ -37,6 +37,8 @@ class ApiManager {
         public val USER = "user"
         public val PERMISSIONS = "permissions"
         public val BATCH = "batch"
+        public val OIL = "oil"
+
         public val BATCH_ARRAY_ALL = Arrays.asList("/location", "/odometer", "/attributes")
         public val SELECTION_BATCH = "selection"}
 }

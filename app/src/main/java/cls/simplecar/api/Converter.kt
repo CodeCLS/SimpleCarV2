@@ -5,7 +5,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class Converter : LocationConversion, RangeConversion, OdometerConversion,
-    VehicleListConversion,ApiResultConversion, SmartCarAuthConversion{
+    VehicleListConversion,ApiResultConversion, SmartCarAuthConversion, OilConversion{
     override fun convertLocation(body: String?): Location? {
         var jsonObject = JSONObject(body);
         var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
@@ -52,10 +52,11 @@ class Converter : LocationConversion, RangeConversion, OdometerConversion,
         var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
         if (isSuccessful) {
             var vehicleId: String = jsonObject.getString(ApiManager.VEHICLE_ID)
+            var vin: String = jsonObject.getString(ApiManager.VIN)
             var vehicleMake: String = jsonObject.getString(ApiManager.VEHICLE_MAKE)
             var vehicleModel: String = jsonObject.getString(ApiManager.VEHICLE_MODEL)
             var vehicleYear: String = jsonObject.getString(ApiManager.VEHICLE_YEAR)
-            return VehicleAttributes(vehicleId,vehicleMake,vehicleModel,vehicleYear)
+            return VehicleAttributes(vehicleId,vehicleMake,vehicleModel,vehicleYear,vin)
         }
         return null
     }
@@ -115,5 +116,16 @@ class Converter : LocationConversion, RangeConversion, OdometerConversion,
         }
         return null
     }
+
+    override fun convertOil(body: String?): Oil? {
+        if (body == null)
+            return null
+        var jsonObject = JSONObject(body);
+        var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
+        if (isSuccessful) {
+            var oil: Double = jsonObject.getDouble(ApiManager.OIL)
+            return Oil(oil)
+        }
+        return null    }
 
 }

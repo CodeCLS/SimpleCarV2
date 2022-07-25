@@ -97,4 +97,10 @@ public interface ApiService {
     @GET("/user/{uid}/validate/smartcar_token")
     Call<ResponseBody> isTokenValid(@Header("api-code") String apiCode,
                                               @Header("access-token-smart-car") String token,
-                                              @Path("uid") String uid);}
+                                              @Path("uid") String uid);
+
+    @GET("user/{uid}/vehicle/{id}/oil")
+    Call<ResponseBody> getOil(@Header("api-code") String apiCode,
+                                  @Header("access-token-smart-car") String token,
+                                  @Path("uid") String uid,
+                                  @Path("id") String id);}

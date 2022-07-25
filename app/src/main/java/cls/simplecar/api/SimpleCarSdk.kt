@@ -222,6 +222,27 @@ class SimpleCarSdk {
         })
 
     }
+    fun getOil(id:String,apiResult: OilCallback) {
+        service.getOil(apiCode,smartCarCode,uid,id).enqueue(object :
+            Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                var body = response.body()?.string()
+                var attrs = Converter().convertOil(body)
+                if(attrs != null){
+                    apiResult.oil(attrs)
+                }
+                else{
+                    apiResult.exception(Converter().convertException(body))
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                apiResult.exception(Exception(t.message, ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
+
+            }
+
+        })
+
+    }
     fun getAccessTokenWithAuthToken(token:String,apiResult: ApiAuthPackageCallback) {
         service.getAccessWithAuthToken(apiCode,token,"NO_ACCOUNT").enqueue(object :
             Callback<ResponseBody>{
@@ -289,6 +310,10 @@ class SimpleCarSdk {
         })
 
     }
+
+
+
+
 
     interface OnSimpleCarSignUpFeedback{
         fun result(apiResponse: Boolean, status: Status)

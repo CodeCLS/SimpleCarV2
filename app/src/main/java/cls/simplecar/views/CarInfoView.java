@@ -9,10 +9,15 @@ import cls.simplecar.tools.DirectionsTool;
 import cls.simplecar.tools.OnCarUpdate;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,6 +35,7 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
     private TextView range;
     private TextView odometer;
     private Car car;
+    private TextView titleName;
 
     public CarInfoView(@NonNull Context context) {
         super(context);
@@ -59,6 +65,7 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
         carImg = findViewById(R.id.car_bubble_car_info);
         range = findViewById(R.id.text_charge_car_info);
         timeWalking = findViewById(R.id.text_walk_car_info);
+        titleName = findViewById(R.id.your_car_txt_info_car);
         name = findViewById(R.id.your_car_txt_info_car_type);
         odometer = findViewById(R.id.text_odometer_car_info);
         Glide.with(getContext()).load("https://www.downloadclipart.net/large/tesla-png-transparent.png").centerInside().into(carImg);
@@ -74,6 +81,11 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
             public void run() {
                 range.setText(car.getDriveProductAmount() + " km");
                 odometer.setText(car.getOdometer() + " km");
+                Spannable spannable = new SpannableString("Your Car (" + car.getVin() + ")");
+                spannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                titleName.setText(spannable);
+                if (car.getVin() == null)
+                    titleName.setText("Your Car");
                 if (car.getDriveProductAmount() < 0 )
                     range.setText("Loading");
                 if (car.getOdometer() < 0)

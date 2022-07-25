@@ -10,6 +10,8 @@ import cls.simplecar.api.ApiResult;
 import cls.simplecar.api.ApiSmartCarAuthPackage;
 import cls.simplecar.api.LocationCallback;
 import cls.simplecar.api.Odometer;
+import cls.simplecar.api.Oil;
+import cls.simplecar.api.OilCallback;
 import cls.simplecar.api.RangeCallback;
 import cls.simplecar.api.VehicleAttributes;
 import cls.simplecar.api.VehicleCallback;
@@ -157,6 +159,7 @@ public class CarViewModel extends ViewModel {
             updateLocationOfCar(context, car);
             updateRangeOfCar(context, car);
             updateOdometerOfCar(context,car);
+            updateOilOfCar(context,car);
         });
 
     }
@@ -213,6 +216,33 @@ public class CarViewModel extends ViewModel {
             }
         });
     }
+
+    private void updateOilOfCar(Context context, Car car) {
+        simpleCarSdk.getOil(car.getSmartCarId(),new OilCallback() {
+            @Override
+            public void oil(@Nullable Oil oil) {
+                CarDataBaseRepo.getInstance(context).getCarWithSmartCarId(car.getSmartCarId(),
+                        new CarDataBaseRepo.OnRetrieveCar() {
+                            @Override
+                            public void car(Car car) {
+                                if (oil != null) {
+                                    car.setOilPercentage(oil.getOilPercentage());
+
+
+                                }
+
+                            }
+                        });
+            }
+
+            @Override
+            public void exception(@NonNull Exception exception) {
+                Log.d(TAG, "exception:123 " + exception);
+                //Toast.makeText(context, exception.getMsg(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void updateOdometerOfCar(Context context, Car car) {
         simpleCarSdk.getOdometer(car.getSmartCarId(),new VehicleOdometerCallback() {
             @Override
@@ -398,6 +428,7 @@ public class CarViewModel extends ViewModel {
         updateLocationOfCar(context,car);
         updateRangeOfCar(context,car);
         updateOdometerOfCar(context,car);
+        updateOilOfCar(context,car);
 
     }
 

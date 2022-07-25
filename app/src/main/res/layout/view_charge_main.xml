@@ -6,15 +6,28 @@
     android:background="@drawable/background_main_charge">
 
     <TextView
+        android:id="@+id/title_charge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_2"
+        android:text="Car Charge / Fuel"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/margin_2"
+        android:layout_marginTop="@dimen/margin_1" />
+
+    <TextView
         android:id="@+id/charge_txt_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_6"
+        android:layout_marginBottom="@dimen/margin_1"
         android:text="90%"
         android:maxLength="5"
         android:fontFamily="@font/montserrat_medium"
         android:textColor="@color/cultured_white"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_charge"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="@dimen/margin_2" />
@@ -23,14 +36,13 @@
         android:id="@+id/charge_container_parent"
         android:layout_width="0dp"
         android:layout_height="25dp"
-        android:layout_marginTop="@dimen/margin_2"
-        android:layout_marginBottom="@dimen/margin_2"
         android:layout_marginEnd="@dimen/margin_2"
         app:layout_constraintStart_toEndOf="@id/charge_txt_box"
         android:layout_marginStart="@dimen/margin_1"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/charge_txt_box"
+        app:layout_constraintBottom_toBottomOf="@id/charge_txt_box"
         >
 
         <View

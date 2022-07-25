@@ -2,8 +2,7 @@ package cls.simplecar.views;
 import cls.simplecar.R;
 import cls.simplecar.models.Car;
 import cls.simplecar.tools.OnCarUpdate;
-import cls.simplecar.models.Car;
-import cls.simplecar.tools.OnCarUpdate;
+import cls.simplecar.tools.OnCarUpdateDiffer;
 
 import android.content.Context;
 import android.os.Build;
@@ -20,7 +19,10 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
-public class CarChargeView extends FrameLayout implements OnCarUpdate {
+public class CarChargeView extends FrameLayout implements OnCarUpdateDiffer {
+    public static final int CHARGE = 1;
+    public static final int OIL = 2;
+
     private View chargingPercentView;
     private ConstraintLayout parent;
     private TextView textView;
@@ -55,9 +57,11 @@ public class CarChargeView extends FrameLayout implements OnCarUpdate {
     }
 
     private static final String TAG = "CarChargeView";
-    @Override
-    public void update(Car car) {
-        this.percent = car.getDriveProductAmountPercent();
+    public void update(int type, Car car) {
+        if (type == OIL)
+            this.percent = car.getOilPercentage();
+        else
+            this.percent = car.getDriveProductAmountPercent();
         Log.d(TAG, "update:percent " + percent);
         if (parent != null) {
             setChargingPercentView(percent);

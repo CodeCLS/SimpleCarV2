@@ -8,9 +8,15 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+
 import cls.simplecar.R;
 
 public class CarLogView extends FrameLayout {
+    private MapView mapView;
+    private GoogleMap googleMap;
     public CarLogView(@NonNull Context context) {
         super(context);
         init();
@@ -33,5 +39,13 @@ public class CarLogView extends FrameLayout {
 
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.view_log_car,this);
+        mapView = findViewById(R.id.map_google1);
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(@NonNull GoogleMap googleMap) {
+
+
+            }
+        });
     }
 }

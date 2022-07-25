@@ -110,7 +110,7 @@
                 android:layout_marginTop="@dimen/margin_1"
 
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/car_charge_view"
+                app:layout_constraintTop_toBottomOf="@id/car_oil_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
@@ -152,11 +152,24 @@
                 android:layout_marginStart="@dimen/margin_1"
                 android:layout_marginEnd="@dimen/margin_1"
                 android:layout_marginBottom="@dimen/margin_1"
-                app:layout_constraintBottom_toTopOf="@id/btn_container_lock"
+                app:layout_constraintBottom_toTopOf="@id/car_oil_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="@dimen/margin_1"
                 app:layout_constraintTop_toBottomOf="@id/location_main_fragment" />
+
+            <cls.simplecar.views.CarChargeView
+                android:id="@+id/car_oil_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_1"
+                android:layout_marginEnd="@dimen/margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                app:layout_constraintBottom_toTopOf="@id/btn_container_lock"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_charge_view" />
+
 
             <cls.simplecar.views.CarInfoView
                 android:id="@+id/car_info_view_main"

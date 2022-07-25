@@ -57,6 +57,7 @@ public class MainFragment extends Fragment {
     private CarViewModel viewModel;
 
     private CarInfoView carInfoView;
+    private CarChargeView carOilView;
     private CarChargeView carChargeView;
     private MonthlyPlanView monthlyPlanView;
     private StandardButton lock;
@@ -104,6 +105,7 @@ public class MainFragment extends Fragment {
 
         parent = view.findViewById(R.id.main_fragment_parent);
         locationView = view.findViewById(R.id.location_main_fragment);
+        carOilView = view.findViewById(R.id.car_oil_view);
 
         mapView = locationView.getMapView();
         mapView.onCreate(savedInstanceState);
@@ -311,8 +313,9 @@ public class MainFragment extends Fragment {
         mapView.getMapAsync(locationView);
         locationView.update(car);
         carInfoView.update(car);
-        carChargeView.update(car);
+        carChargeView.update(CarChargeView.CHARGE,car);
         monthlyPlanView.update(car);
+        carOilView.update(CarChargeView.OIL,car);
         //SupportMapFragment supportMapFragment =(SupportMapFragment)getChildFragmentManager().findFragmentByTag("123");
         //if (supportMapFragment != null) {
         //    supportMapFragment.getMapAsync(new OnMapReadyCallback() {
