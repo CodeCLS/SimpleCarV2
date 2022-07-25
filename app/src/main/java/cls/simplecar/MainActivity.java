@@ -42,10 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initViews();
         showSplash();
-        savedInstance = savedInstanceState;
-        initViewModel();
-        getPermissions();
-        observe();
+
 
         //getPermissions();
 
@@ -71,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                initViewModel();
+                getPermissions();
+                observe();
                 //showFragment(new IntroductionSliderFragment());
 
             }

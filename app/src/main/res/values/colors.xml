@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="timberwolf">#F3ECEB</color>
+    <color name="blue">#00243D</color>
+
     <color name="textPassive">#B4AFAF</color>
     <color name="textActive">#151213</color>
     <color name="gray_1">#B7EFEAE6</color>

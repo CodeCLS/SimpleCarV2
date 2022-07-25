@@ -1,5 +1,6 @@
 package cls.simplecar.api;
 
+import android.os.Build
 import android.util.Log
 import okhttp3.ResponseBody
 import org.json.JSONObject
@@ -228,6 +229,7 @@ class SimpleCarSdk {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 var body = response.body()?.string()
                 var attrs = Converter().convertOil(body)
+                Log.d(TAG, "onResponsOile: " + body)
                 if(attrs != null){
                     apiResult.oil(attrs)
                 }
@@ -258,6 +260,7 @@ class SimpleCarSdk {
 
     }
     fun refreshToken(auth:String, authClient:String,apiResult: ApiAuthPackageCallback) {
+        Log.d(TAG, "refreshToken: " + auth + " " + authClient + " " + apiCode)
         service.refreshToken(apiCode,smartCarCode,"NO_ACCOUNT",auth,authClient).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -316,7 +319,11 @@ class SimpleCarSdk {
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 var body = response.body()?.string()
-                var attrs = Converter().convertPermissions(body)
+                var attrs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    Converter().convertPermissions(body)
+                } else {
+                    TODO("VERSION.SDK_INT < KITKAT")
+                }
                 if(attrs != null){
                     vehiclePermissionsCallback.result(attrs)
                 }

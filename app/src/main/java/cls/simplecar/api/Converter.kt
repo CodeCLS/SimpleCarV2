@@ -102,6 +102,7 @@ class Converter : LocationConversion, RangeConversion, OdometerConversion,
             var refreshToken: String = jsonObject.getString(ApiManager.REFRESH_TOKEN)
             var authClient: String = jsonObject.getString(ApiManager.AUTH_CLIENT)
             var auth: String = jsonObject.getString(ApiManager.AUTH)
+            Log.d(TAG, "convertAuthResult: " + authClient + " " + auth)
             return ApiSmartCarAuthPackage(accessToken,refreshToken,auth,authClient)
         }
         return null
