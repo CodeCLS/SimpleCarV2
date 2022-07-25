@@ -27,6 +27,7 @@ public class CarChargeView extends FrameLayout implements OnCarUpdateDiffer {
     private ConstraintLayout parent;
     private TextView textView;
     private Double percent = 50.0;
+    private TextView titleName;
 
     public CarChargeView(@NonNull Context context) {
         super(context);
@@ -53,15 +54,22 @@ public class CarChargeView extends FrameLayout implements OnCarUpdateDiffer {
         LayoutInflater.from(getContext()).inflate(R.layout.view_charge_main,this);
         parent = findViewById(R.id.charge_container_parent);
         textView = findViewById(R.id.charge_txt_box);
+        titleName = findViewById(R.id.title_charge);
+
         setChargingPercentView(percent);
     }
 
     private static final String TAG = "CarChargeView";
     public void update(int type, Car car) {
-        if (type == OIL)
+        if (type == OIL) {
             this.percent = car.getOilPercentage();
-        else
+            titleName.setText("Oil level");
+        }
+        else {
             this.percent = car.getDriveProductAmountPercent();
+            titleName.setText("Fuel | Charge level");
+
+        }
         Log.d(TAG, "update:percent " + percent);
         if (parent != null) {
             setChargingPercentView(percent);
