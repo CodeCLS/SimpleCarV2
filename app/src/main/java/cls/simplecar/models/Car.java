@@ -36,7 +36,7 @@ public class Car {
     private Integer tirePressure = 0;
     private Boolean canHeat = true;
     private Boolean isAirCondOn = false;
-    private String vin = "None";
+    private String vin = "";
     @Ignore
     public Car() {
     }

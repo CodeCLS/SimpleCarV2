@@ -44,6 +44,7 @@ import androidx.lifecycle.ViewModel;
 import com.smartcar.sdk.SmartcarResponse;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -54,6 +55,8 @@ public class CarViewModel extends ViewModel {
     public MutableLiveData<Car> carMutableLiveData = new MutableLiveData<>();
     public LiveData<List<Car>> carsLiveData = new MutableLiveData<List<Car>>();
 
+    private ExecutorService executorService = Executors.newFixedThreadPool(4);
+
 
     public MutableLiveData<Location> monthlySubscriptionMutableLiveData = new MutableLiveData<>();
     public MutableLiveData<Boolean> isNotificationsEnabled = new MutableLiveData<>();
@@ -61,7 +64,7 @@ public class CarViewModel extends ViewModel {
     public MutableLiveData<Boolean> hasSimpleCarAccess = new MutableLiveData<>(true);
 
     private SmartCarLauncher launcher;
-    private Car currentCar;
+    public Car currentCar;
 
     public CarViewModel() {
         launcher = new SmartCarLauncher();
@@ -93,7 +96,10 @@ public class CarViewModel extends ViewModel {
                 Application.getSimpleCarApiCode(),
                 accessTokenSmartCar,
                 uid);
+        setSelectedCar(context);
+    }
 
+    private void setSelectedCar(Context context) {
         CarDataBaseRepo.getInstance(context).getCars(new CarDataBaseRepo.OnRetrieveListOfCars() {
             @Override
             public void theList(List<Car> cars) {
@@ -117,11 +123,11 @@ public class CarViewModel extends ViewModel {
             @Override
             public void run() {
                 carMutableLiveData.setValue(car);
+                currentCar = car;
 
             }
         });
     }
-
     public LiveData<List<Car>> getCarsLiveData() {
         return carsLiveData;
     }
@@ -130,25 +136,14 @@ public class CarViewModel extends ViewModel {
         return carMutableLiveData;
     }
 
-    public MutableLiveData<Boolean> getIsNotificationsEnabled() {
-        return isNotificationsEnabled;
-    }
 
-    public void setIsNotificationsEnabled(MutableLiveData<Boolean> isNotificationsEnabled) {
-        this.isNotificationsEnabled = isNotificationsEnabled;
-    }
     public void startUpdatingAttrs(Context context){
         CarDataBaseRepo.getInstance(context).getCars(cars -> {
             for (Car car : cars) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateAllAttrs(context, car);
-                        UpdaterConnection updaterConnection = new UpdaterConnection(() -> updateAllAttrs(context,car));
-                        CarAttributesUpdater carAttributesUpdater = new CarAttributesUpdater(updaterConnection);
-                        carAttributesUpdater.run();
-                    }
-                },2000);
+                updateAllAttrs(context, car);
+                UpdaterConnection updaterConnection = new UpdaterConnection(() -> updateAllAttrs(context,car));
+                CarAttributesUpdater carAttributesUpdater = new CarAttributesUpdater(updaterConnection);
+                carAttributesUpdater.run();
             }
         });
 
@@ -156,7 +151,7 @@ public class CarViewModel extends ViewModel {
     }
 
     private void updateAllAttrs(Context context,Car car) {
-        Future<?> i = Executors.newSingleThreadExecutor().submit(() -> {
+        Future<?> i = executorService.submit(() -> {
             updateLocationOfCar(context, car);
             updateRangeOfCar(context, car);
         });
@@ -164,8 +159,6 @@ public class CarViewModel extends ViewModel {
     }
 
     private void updateLocationOfCar(Context context, Car car) {
-        Log.d(TAG, "car:1 " + car.getRoomId());
-
         simpleCarSdk.getLocation(car.getSmartCarId(),new LocationCallback() {
             @Override
             public void location(@Nullable cls.simplecar.api.Location location) {
@@ -177,7 +170,6 @@ public class CarViewModel extends ViewModel {
                         if (location != null) {
                             Log.d(TAG, "car:11 " + car.getRoomId() + car.getSmartCarId() + " " + location);
                             car.setLocation(new Location(location.getLatitude(), location.getLongitude()));
-
                             CarDataBaseRepo.getInstance(context).updateCar(car);
                         }
 
@@ -187,7 +179,8 @@ public class CarViewModel extends ViewModel {
 
             @Override
             public void exception(@NonNull Exception exception) {
-                Toast.makeText(context, exception.getMsg(), Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(context, exception.getMsg(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -212,6 +205,7 @@ public class CarViewModel extends ViewModel {
 
             @Override
             public void exception(@NonNull Exception exception) {
+                Log.d(TAG, "exception:123 " + exception);
                 Toast.makeText(context, exception.getMsg(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -224,25 +218,18 @@ public class CarViewModel extends ViewModel {
             hasSmartCarAccess.setValue(true);
             simpleCarSdk.isTokenValid(new ApiResult() {
                 @Override
-                public void result(boolean result) {
-                    if (!result) {
-                        Log.d(TAG, "onResponse:123 ");
-                        simpleCarSdk.refreshToken(user.getAuthSmartCar(), user.getAuthClientSmartCar(), new ApiAuthPackageCallback() {
-                            @Override
-                            public void result(@Nullable ApiSmartCarAuthPackage packageSmartCar) {
-                                if (packageSmartCar != null) {
-                                    updateUserAccess(context,packageSmartCar);
-                                    hasSmartCarAccess.setValue(true);
+                public void exception(@NonNull Exception exception) {
+                }
 
-                                } else {
-                                    hasSmartCarAccess.setValue(false);
-                                }
-                            }
-                            @Override
-                            public void exception(@NonNull Exception exception) {
-                                hasSmartCarAccess.setValue(false);
-                            }
-                        });
+                @Override
+                public void result(boolean result) {
+                    handleTokenResult(result);
+
+                }
+
+                private void handleTokenResult(boolean result) {
+                    if (!result) {
+                        refreshToken(user, context);
                         Toast.makeText(context, R.string.access_expired, Toast.LENGTH_SHORT).show();
                     }
                     else {
@@ -250,7 +237,6 @@ public class CarViewModel extends ViewModel {
                         hasSmartCarAccess.setValue(result);
 
                     }
-
                 }
             });
         }
@@ -262,6 +248,27 @@ public class CarViewModel extends ViewModel {
         return hasSmartCarAccess;
 
     }
+
+    private void refreshToken(User user, Context context) {
+        Log.d(TAG, "onResponse:123 ");
+        simpleCarSdk.refreshToken(user.getAuthSmartCar(), user.getAuthClientSmartCar(), new ApiAuthPackageCallback() {
+            @Override
+            public void result(@Nullable ApiSmartCarAuthPackage packageSmartCar) {
+                if (packageSmartCar != null) {
+                    updateUserAccess(context,packageSmartCar);
+                    hasSmartCarAccess.setValue(true);
+
+                } else {
+                    hasSmartCarAccess.setValue(false);
+                }
+            }
+            @Override
+            public void exception(@NonNull Exception exception) {
+                hasSmartCarAccess.setValue(false);
+            }
+        });
+    }
+
     public MutableLiveData<Boolean> getHasSmartCarAccess() {
         return hasSmartCarAccess;
     }
@@ -431,5 +438,17 @@ public class CarViewModel extends ViewModel {
     public void lockCar(Context context,ApiResult apiResult) {
         if (currentCar!= null)
             simpleCarSdk.lockVehicle(currentCar.getSmartCarId(),apiResult);
+    }
+
+    public void updateCurrentCar(List<Car> cars) {
+        if (cars == null || cars.size() == 0)
+            return;
+        if (currentCar == null)
+            currentCar = cars.get(0);
+        for (Car car : cars){
+            if (car.getSmartCarId().equals(currentCar.getSmartCarId())){
+                currentCar = car;
+            }
+        }
     }
 }

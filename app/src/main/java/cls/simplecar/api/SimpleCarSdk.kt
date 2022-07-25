@@ -64,7 +64,14 @@ class SimpleCarSdk {
         service.getCars(apiCode,smartCarCode,uid).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                vehicleIdListCallback.getVehicles(Converter().convertVehicleList(response.body()?.string()))
+                var body = response.body()?.string()
+                var vehicleIds = Converter().convertVehicleList(body)
+                if(vehicleIds != null){
+                    vehicleIdListCallback.getVehicles(vehicleIds)
+                }
+                else{
+                    vehicleIdListCallback.exception(Converter().convertException(body))
+                }
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 vehicleIdListCallback.exception(Exception(t.message,ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
@@ -80,8 +87,14 @@ class SimpleCarSdk {
         service.getVehicleRange(apiCode,smartCarCode,uid,id).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                rangeCallback.range(Converter().convertRange(response.body()?.string()))
-            }
+                var body = response.body()?.string()
+                var range = Converter().convertRange(body)
+                if(range != null){
+                    rangeCallback.range(range)
+                }
+                else{
+                    rangeCallback.exception(Converter().convertException(body))
+                }            }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 rangeCallback.exception(Exception(t.message,ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
 
@@ -112,7 +125,14 @@ class SimpleCarSdk {
         service.getVehicleLocation(apiCode,smartCarCode,uid,id).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                locationCallback.location(Converter().convertLocation(response.body()?.string()))
+                var body = response.body()?.string()
+                var location = Converter().convertLocation(body)
+                if(location != null){
+                    locationCallback.location(location)
+                }
+                else{
+                    locationCallback.exception(Converter().convertException(body))
+                }
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 locationCallback.exception(Exception(t.message,ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
@@ -126,7 +146,13 @@ class SimpleCarSdk {
         service.unlockVehicle(apiCode,smartCarCode,uid,id).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                apiResult.result(Converter().convertApiResult(response.body()?.string()))
+                var body = response.body()?.string()
+                var result = Converter().convertApiResult(body)
+                if(!result){
+                    apiResult.exception(Converter().convertException(body))
+                }
+                apiResult.result(result)
+
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 apiResult.result(false)
@@ -140,7 +166,12 @@ class SimpleCarSdk {
         service.lockVehicle(apiCode,smartCarCode,uid,id).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                 apiResult.result(Converter().convertApiResult(response.body()?.string()))
+                var body = response.body()?.string()
+                var result = Converter().convertApiResult(body)
+                if(!result){
+                    apiResult.exception(Converter().convertException(body))
+                }
+                apiResult.result(result)
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 apiResult.result(false)
@@ -154,7 +185,14 @@ class SimpleCarSdk {
         service.getVehicleAttributes(apiCode,smartCarCode,uid,id).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                apiResult.getVehicle(Converter().convertVehicleAttributes(response.body()?.string()))
+                var body = response.body()?.string()
+                var attrs = Converter().convertVehicleAttributes(body)
+                if(attrs != null){
+                    apiResult.getVehicle(attrs)
+                }
+                else{
+                    apiResult.exception(Converter().convertException(body))
+                }
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 apiResult.exception(Exception(t.message, ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))

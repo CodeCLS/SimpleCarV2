@@ -11,6 +11,7 @@ class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiR
         if (isSuccessful) {
             var latitude: Double = jsonObject.getDouble(ApiManager.LATITUDE)
             var longitude: Double = jsonObject.getDouble(ApiManager.LONGITUDE)
+            Log.d(TAG, "convertLocation: " + latitude + longitude)
             return Location(latitude, longitude)
         }
         return null
@@ -36,7 +37,7 @@ class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiR
             var jsonArray : JSONArray = jsonObject.getJSONArray(ApiManager.VEHICLE_IDS)
             var list : ArrayList<String> = ArrayList<String>()
             Log.d(TAG, "convertVehicleList: " + jsonArray.length())
-            for (i in 0 until (jsonArray.length()-1)){
+            for (i in 0 until (jsonArray.length())){
                 list.add(jsonArray.getString(i))
 
             }
@@ -72,7 +73,24 @@ class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiR
         return JSONObject(body).getJSONObject(parent)
     }
 
+    override fun convertException(body: String?): Exception {
+        if (body == null)
+            return cls.simplecar.api.Exception("None",-1)
+        var jsonObject = JSONObject(body);
+        Log.d(TAG, "convertException: " + body)
+
+        var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
+        if (!isSuccessful) {
+            var exceptionMsg: String = jsonObject.getString(ApiManager.EXCEPTION_MSG)
+            var exceptionCode: Int = jsonObject.getInt(ApiManager.EXCEPTION_CODE)
+            return cls.simplecar.api.Exception(exceptionMsg,exceptionCode)
+        }
+        return cls.simplecar.api.Exception("",-1)
+    }
+
     override fun convertAuthResult(body: String?) : ApiSmartCarAuthPackage? {
+        if (body == null)
+            return null
         var jsonObject = JSONObject(body);
         var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
         if (isSuccessful) {

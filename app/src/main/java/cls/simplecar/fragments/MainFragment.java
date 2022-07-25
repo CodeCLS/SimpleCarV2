@@ -6,6 +6,7 @@ import cls.simplecar.R;
 import cls.simplecar.SaveDataTool;
 import cls.simplecar.Spawner;
 
+import cls.simplecar.api.Exception;
 import cls.simplecar.database.CarDataBaseRepo;
 import cls.simplecar.models.Car;
 import cls.simplecar.tools.DirectionsTool;
@@ -152,6 +153,11 @@ public class MainFragment extends Fragment {
             public void onClick(View view1) {
                 viewModel.unlockCar(getContext(), new ApiResult() {
                     @Override
+                    public void exception(@NonNull Exception exception) {
+
+                    }
+
+                    @Override
                     public void result(boolean result) {
                         if (result)
                             Toast.makeText(getContext(), R.string.unlock_request_send, Toast.LENGTH_SHORT).show();
@@ -184,6 +190,11 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view1) {
                 viewModel.lockCar(getContext(), new ApiResult() {
+                    @Override
+                    public void exception(@NonNull Exception exception) {
+
+                    }
+
                     @Override
                     public void result(boolean result) {
                         if (result)
@@ -221,6 +232,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onChanged(List<Car> cars) {
+                viewModel.updateCurrentCar(cars);
                 this.carOptions = cars;
                 Log.d(TAG, "onChanged:123123 " + cars);
                 if (!MainFragment.this.isVisible()) {
@@ -274,6 +286,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(Car car) {
                 Log.d(TAG, "onChanged123: " +car);
+                viewModel.currentCar = car;
                 if (car != null) {
                     updateViews(car);
                 }

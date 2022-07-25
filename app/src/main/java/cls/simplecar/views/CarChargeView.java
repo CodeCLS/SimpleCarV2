@@ -62,6 +62,9 @@ public class CarChargeView extends FrameLayout implements OnCarUpdate {
         if (parent != null) {
             setChargingPercentView(percent);
             textView.setText((new Double(percent * 100)).intValue()+ "%");
+            if (percent < 0)
+                textView.setText("~~~");
+
         }
 
     }

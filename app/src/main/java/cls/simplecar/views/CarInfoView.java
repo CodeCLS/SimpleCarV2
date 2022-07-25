@@ -71,6 +71,8 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
             @Override
             public void run() {
                 range.setText(car.getDriveProductAmount() + " km");
+                if (car.getDriveProductAmount() < 0 )
+                    range.setText("Loading");
                 name.setText(mergeCarTitle(car.getBrand(),car.getName(),car.getModel()));
                 DirectionsTool.getExactLocation(getContext(), new OnSuccessListener<Location>() {
                     @Override

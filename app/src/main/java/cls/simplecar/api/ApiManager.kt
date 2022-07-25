@@ -9,6 +9,10 @@ class ApiManager {
         public val FIRST_NAME = "first_name"
         public val SECOND_NAME = "second_name"
 
+        public val EXCEPTION_MSG = "error_msg"
+        public val EXCEPTION_CODE = "error_code"
+
+
         public val VEHICLE_MAKE = "vehicle_make"
         public val VEHICLE_MODEL = "vehicle_model"
         public val VEHICLE_YEAR = "vehicle_year"
