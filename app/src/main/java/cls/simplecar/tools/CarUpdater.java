@@ -130,6 +130,9 @@ public class CarUpdater {
                             public void car(Car car) {
                                 if (oil != null) {
                                     car.setOilPercentage(oil.getOilPercentage());
+                                    CarDataBaseRepo.getInstance(context).updateCar(car);
+
+
 
 
                                 }

@@ -100,7 +100,7 @@
         android:layout_marginStart="@dimen/margin_regular"
         android:tint="@color/textPassive"
         app:layout_constraintTop_toTopOf="@+id/text_charge_car_info"
-        android:src="@drawable/ic_walking"
+        android:src="@drawable/ic_map"
         app:layout_constraintStart_toEndOf="@id/text_walk_car_info"
         app:layout_constraintBottom_toBottomOf="parent"
 
