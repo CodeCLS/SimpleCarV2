@@ -26,6 +26,7 @@ public class Car {
     private Long year = -1L;
     private Boolean isLocked = true;
     private Boolean isElectric = false;
+    private Long odometer = -1L;
 
     private ArrayList<String> hasPermissions = new ArrayList<>();
     private Location location = new Location(51.5,-0.127);
@@ -45,7 +46,7 @@ public class Car {
         this.smartCarId = smartCarId;
     }
 
-    public Car(Long roomId, String smartCarId, String model, String name, String brand, Long year, Boolean isLocked, Boolean isElectric, ArrayList<String> hasPermissions, Location location, Double driveProductAmount, Double driveProductAmountPercent, Double driveDuration, Integer tirePressure, Boolean canHeat, Boolean isAirCondOn, String vin) {
+    public Car(Long roomId, String smartCarId, String model, String name, String brand, Long year, Boolean isLocked, Boolean isElectric, Long odometer, ArrayList<String> hasPermissions, Location location, Double driveProductAmount, Double driveProductAmountPercent, Double driveDuration, Integer tirePressure, Boolean canHeat, Boolean isAirCondOn, String vin) {
         this.roomId = roomId;
         this.smartCarId = smartCarId;
         this.model = model;
@@ -54,6 +55,7 @@ public class Car {
         this.year = year;
         this.isLocked = isLocked;
         this.isElectric = isElectric;
+        this.odometer = odometer;
         this.hasPermissions = hasPermissions;
         this.location = location;
         this.driveProductAmount = driveProductAmount;
@@ -211,6 +213,11 @@ public class Car {
         this.vin = vin;
     }
 
+    public Long getOdometer() {
+        return odometer;
+    }
 
-
+    public void setOdometer(Long odometer) {
+        this.odometer = odometer;
+    }
 }

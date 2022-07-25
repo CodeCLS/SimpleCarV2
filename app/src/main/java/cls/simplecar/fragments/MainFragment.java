@@ -227,6 +227,16 @@ public class MainFragment extends Fragment {
             }
         });
         viewModel = ((MainActivity)getActivity()).getViewModelCar();
+        viewModel.getCarMutableLiveData().observe(getActivity(), new Observer<Car>() {
+            @Override
+            public void onChanged(Car car) {
+                Log.d(TAG, "onChanged123: " +car);
+                viewModel.currentCar = car;
+                if (car != null) {
+                    updateViews(car);
+                }
+            }
+        });
         viewModel.getCarsLiveData().observe(getActivity(), new Observer<List<Car>>() {
             private List<Car> carOptions;
 
@@ -239,6 +249,8 @@ public class MainFragment extends Fragment {
                     return;
                 }
                 carOptionsContainer.removeAllViews();
+                viewModel.startUpdatingAttrs(getContext());
+
                 for (Car car: cars) {
                     StandardButton standardButton = new StandardButton(getActivity());
 
@@ -281,17 +293,7 @@ public class MainFragment extends Fragment {
                 carOptionsContainer.postInvalidate();
             }
         });
-        viewModel.startUpdatingAttrs(getContext());
-        viewModel.getCarMutableLiveData().observe(getActivity(), new Observer<Car>() {
-            @Override
-            public void onChanged(Car car) {
-                Log.d(TAG, "onChanged123: " +car);
-                viewModel.currentCar = car;
-                if (car != null) {
-                    updateViews(car);
-                }
-            }
-        });
+
         //SupportMapFragment supportMapFragment =(SupportMapFragment)getChildFragmentManager().findFragmentByTag("123");
         //if (supportMapFragment != null) {
         //    supportMapFragment.getMapAsync(new OnMapReadyCallback() {

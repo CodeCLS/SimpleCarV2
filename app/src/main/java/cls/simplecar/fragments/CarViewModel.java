@@ -9,10 +9,12 @@ import cls.simplecar.api.ApiAuthPackageCallback;
 import cls.simplecar.api.ApiResult;
 import cls.simplecar.api.ApiSmartCarAuthPackage;
 import cls.simplecar.api.LocationCallback;
+import cls.simplecar.api.Odometer;
 import cls.simplecar.api.RangeCallback;
 import cls.simplecar.api.VehicleAttributes;
 import cls.simplecar.api.VehicleCallback;
 import cls.simplecar.api.VehicleIdListCallback;
+import cls.simplecar.api.VehicleOdometerCallback;
 import cls.simplecar.database.CarDataBaseRepo;
 import cls.simplecar.models.Car;
 import cls.simplecar.models.Location;
@@ -154,6 +156,7 @@ public class CarViewModel extends ViewModel {
         Future<?> i = executorService.submit(() -> {
             updateLocationOfCar(context, car);
             updateRangeOfCar(context, car);
+            updateOdometerOfCar(context,car);
         });
 
     }
@@ -206,7 +209,32 @@ public class CarViewModel extends ViewModel {
             @Override
             public void exception(@NonNull Exception exception) {
                 Log.d(TAG, "exception:123 " + exception);
-                Toast.makeText(context, exception.getMsg(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, exception.getMsg(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void updateOdometerOfCar(Context context, Car car) {
+        simpleCarSdk.getOdometer(car.getSmartCarId(),new VehicleOdometerCallback() {
+            @Override
+            public void result(@Nullable Odometer result) {
+                CarDataBaseRepo.getInstance(context).getCarWithSmartCarId(car.getSmartCarId(),
+                        new CarDataBaseRepo.OnRetrieveCar() {
+                            @Override
+                            public void car(Car car) {
+                                if (result != null) {
+                                    car.setOdometer(result.getOdometer());
+                                    CarDataBaseRepo.getInstance(context).updateCar(car);
+
+                                }
+
+                            }
+                        });
+            }
+
+            @Override
+            public void exception(@NonNull Exception exception) {
+                Log.d(TAG, "exception:123 " + exception);
+                //Toast.makeText(context, exception.getMsg(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -369,6 +397,8 @@ public class CarViewModel extends ViewModel {
     private void updateSingleCarVars(Context context,Car car) {
         updateLocationOfCar(context,car);
         updateRangeOfCar(context,car);
+        updateOdometerOfCar(context,car);
+
     }
 
     private void updateUserAccess(Context context,@NonNull ApiSmartCarAuthPackage packageSmartCar) {

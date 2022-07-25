@@ -1,7 +1,6 @@
 package cls.simplecar.api;
 
 import android.util.Log
-import cls.simplecar.UserRepository
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
@@ -75,6 +74,27 @@ class SimpleCarSdk {
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 vehicleIdListCallback.exception(Exception(t.message,ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
+
+            }
+
+        })
+
+    }
+    fun getOdometer(id : String,odometerCallback: VehicleOdometerCallback) {
+        service.getOdometer(apiCode,smartCarCode,uid,id).enqueue(object :
+            Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                var body = response.body()?.string()
+                var odometer = Converter().convertOdometer(body)
+                if(odometer != null){
+                    odometerCallback.result(odometer)
+                }
+                else{
+                    odometerCallback.exception(Converter().convertException(body))
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                odometerCallback.exception(Exception(t.message,ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
 
             }
 

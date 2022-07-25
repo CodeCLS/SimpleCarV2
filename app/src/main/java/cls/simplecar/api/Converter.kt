@@ -4,7 +4,8 @@ import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
 
-class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiResultConversion, SmartCarAuthConversion{
+class Converter : LocationConversion, RangeConversion, OdometerConversion,
+    VehicleListConversion,ApiResultConversion, SmartCarAuthConversion{
     override fun convertLocation(body: String?): Location? {
         var jsonObject = JSONObject(body);
         var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
@@ -99,6 +100,18 @@ class Converter : LocationConversion, RangeConversion,VehicleListConversion,ApiR
             var authClient: String = jsonObject.getString(ApiManager.AUTH_CLIENT)
             var auth: String = jsonObject.getString(ApiManager.AUTH)
             return ApiSmartCarAuthPackage(accessToken,refreshToken,auth,authClient)
+        }
+        return null
+    }
+
+    override fun convertOdometer(body: String?): Odometer? {
+        if (body == null)
+            return null
+        var jsonObject = JSONObject(body);
+        var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
+        if (isSuccessful) {
+            var odometer: Long = jsonObject.getLong(ApiManager.ODOMETER)
+            return Odometer(odometer)
         }
         return null
     }

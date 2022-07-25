@@ -28,6 +28,7 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
     private TextView name;
     private TextView timeWalking;
     private TextView range;
+    private TextView odometer;
     private Car car;
 
     public CarInfoView(@NonNull Context context) {
@@ -59,6 +60,7 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
         range = findViewById(R.id.text_charge_car_info);
         timeWalking = findViewById(R.id.text_walk_car_info);
         name = findViewById(R.id.your_car_txt_info_car_type);
+        odometer = findViewById(R.id.text_odometer_car_info);
         Glide.with(getContext()).load("https://www.downloadclipart.net/large/tesla-png-transparent.png").centerInside().into(carImg);
 
 
@@ -71,8 +73,11 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
             @Override
             public void run() {
                 range.setText(car.getDriveProductAmount() + " km");
+                odometer.setText(car.getOdometer() + " km");
                 if (car.getDriveProductAmount() < 0 )
                     range.setText("Loading");
+                if (car.getOdometer() < 0)
+                    odometer.setText("Loading");
                 name.setText(mergeCarTitle(car.getBrand(),car.getName(),car.getModel()));
                 DirectionsTool.getExactLocation(getContext(), new OnSuccessListener<Location>() {
                     @Override

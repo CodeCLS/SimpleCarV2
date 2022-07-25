@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/drawable/background_button_passive.xml" value="0.21" />
         <entry key="app/src/main/res/drawable/background_button_standard.xml" value="0.21" />
         <entry key="app/src/main/res/layout/btn_standard_view.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/bubble_car_info.xml" value="0.4677724644757699" />
         <entry key="app/src/main/res/layout/fragment_additional_info.xml" value="0.109375" />
         <entry key="app/src/main/res/layout/fragment_google_pay.xml" value="0.109375" />
         <entry key="app/src/main/res/layout/fragment_introduction.xml" value="0.109375" />

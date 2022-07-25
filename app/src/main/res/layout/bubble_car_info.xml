@@ -93,5 +93,30 @@
         android:layout_marginBottom="@dimen/margin_1"
         android:text="4 min" />
 
+    <ImageView
+        android:id="@+id/img_icon_car_info_odometer"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_regular"
+        android:tint="@color/textPassive"
+        app:layout_constraintTop_toTopOf="@+id/text_charge_car_info"
+        android:src="@drawable/ic_walking"
+        app:layout_constraintStart_toEndOf="@id/text_walk_car_info"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:layout_marginBottom="@dimen/margin_1"/>
+
+    <TextView
+        android:id="@+id/text_odometer_car_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/textPassive"
+        android:textSize="@dimen/text_size_2"
+        app:layout_constraintStart_toEndOf="@id/img_icon_car_info_odometer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/margin_1"
+        android:text="~ km" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
