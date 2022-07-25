@@ -17,6 +17,7 @@ import cls.simplecar.api.VehicleAttributes;
 import cls.simplecar.api.VehicleCallback;
 import cls.simplecar.api.VehicleIdListCallback;
 import cls.simplecar.api.VehicleOdometerCallback;
+import cls.simplecar.api.VehiclePermissionsCallback;
 import cls.simplecar.database.CarDataBaseRepo;
 import cls.simplecar.models.Car;
 import cls.simplecar.models.Location;
@@ -47,6 +48,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.smartcar.sdk.SmartcarResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -160,6 +162,7 @@ public class CarViewModel extends ViewModel {
             updateRangeOfCar(context, car);
             updateOdometerOfCar(context,car);
             updateOilOfCar(context,car);
+            updatePermissionsOfCar(context,car);
         });
 
     }
@@ -253,6 +256,32 @@ public class CarViewModel extends ViewModel {
                             public void car(Car car) {
                                 if (result != null) {
                                     car.setOdometer(result.getOdometer());
+                                    CarDataBaseRepo.getInstance(context).updateCar(car);
+
+                                }
+
+                            }
+                        });
+            }
+
+            @Override
+            public void exception(@NonNull Exception exception) {
+                Log.d(TAG, "exception:123 " + exception);
+                //Toast.makeText(context, exception.getMsg(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updatePermissionsOfCar(Context context, Car car) {
+        simpleCarSdk.getPermissions(car.getSmartCarId(),new VehiclePermissionsCallback() {
+            @Override
+            public void result(@Nullable ArrayList<String> result) {
+                CarDataBaseRepo.getInstance(context).getCarWithSmartCarId(car.getSmartCarId(),
+                        new CarDataBaseRepo.OnRetrieveCar() {
+                            @Override
+                            public void car(Car car) {
+                                if (result != null) {
+                                    car.setHasPermissions(result);
                                     CarDataBaseRepo.getInstance(context).updateCar(car);
 
                                 }
@@ -429,6 +458,7 @@ public class CarViewModel extends ViewModel {
         updateRangeOfCar(context,car);
         updateOdometerOfCar(context,car);
         updateOilOfCar(context,car);
+        updatePermissionsOfCar(context,car);
 
     }
 

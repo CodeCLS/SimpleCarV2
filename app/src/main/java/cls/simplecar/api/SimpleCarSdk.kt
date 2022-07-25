@@ -311,8 +311,26 @@ class SimpleCarSdk {
 
     }
 
+    fun getPermissions(smartCarId: String, vehiclePermissionsCallback: VehiclePermissionsCallback) {
+        service.getPermissions(apiCode,smartCarCode,uid,smartCarId).enqueue(object :
+            Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                var body = response.body()?.string()
+                var attrs = Converter().convertPermissions(body)
+                if(attrs != null){
+                    vehiclePermissionsCallback.result(attrs)
+                }
+                else{
+                    vehiclePermissionsCallback.exception(Converter().convertException(body))
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                vehiclePermissionsCallback.exception(Exception(t.message, ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
 
+            }
 
+        })
+    }
 
 
     interface OnSimpleCarSignUpFeedback{

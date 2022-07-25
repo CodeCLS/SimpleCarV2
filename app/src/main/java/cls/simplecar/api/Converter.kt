@@ -1,11 +1,13 @@
 package cls.simplecar.api;
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import org.json.JSONArray
 import org.json.JSONObject
 
 class Converter : LocationConversion, RangeConversion, OdometerConversion,
-    VehicleListConversion,ApiResultConversion, SmartCarAuthConversion, OilConversion{
+    VehicleListConversion,ApiResultConversion, SmartCarAuthConversion, OilConversion, PermissionConversion{
     override fun convertLocation(body: String?): Location? {
         var jsonObject = JSONObject(body);
         var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
@@ -127,5 +129,23 @@ class Converter : LocationConversion, RangeConversion, OdometerConversion,
             return Oil(oil)
         }
         return null    }
+
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
+    override fun convertPermissions(body: String?): ArrayList<String>? {
+        if (body == null)
+            return null
+        Log.d(TAG, "convertPermissions: " + body)
+        var array = ArrayList<String>()
+        var jsonObject = JSONObject(body);
+        var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
+        if (isSuccessful) {
+            var jsonArray = jsonObject.getJSONArray(ApiManager.PERMISSIONS)
+            for (i in 0 until jsonArray.length()) {
+                array.add(jsonArray.getString(i))
+            }
+            return array
+        }
+        return null
+    }
 
 }

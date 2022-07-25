@@ -103,4 +103,11 @@ public interface ApiService {
     Call<ResponseBody> getOil(@Header("api-code") String apiCode,
                                   @Header("access-token-smart-car") String token,
                                   @Path("uid") String uid,
-                                  @Path("id") String id);}
+                                  @Path("id") String id);
+
+    @GET("user/{uid}/vehicle/{id}/permissions")
+    Call<ResponseBody> getPermissions(@Header("api-code") String apiCode,
+                              @Header("access-token-smart-car") String token,
+                              @Path("uid") String uid,
+                              @Path("id") String id);
+}
