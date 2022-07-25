@@ -46,6 +46,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainFragment extends Fragment {
@@ -92,6 +93,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = ((MainActivity)getActivity()).getViewModelCar();
 
 
 
@@ -228,7 +230,6 @@ public class MainFragment extends Fragment {
                         parent);
             }
         });
-        viewModel = ((MainActivity)getActivity()).getViewModelCar();
         viewModel.getCarMutableLiveData().observe(getActivity(), new Observer<Car>() {
             @Override
             public void onChanged(Car car) {
@@ -310,21 +311,30 @@ public class MainFragment extends Fragment {
 
 
     private void updateViews(Car car) {
+        ArrayList<String> permissions = car.getHasPermissions();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            carOilView.setAlpha(0.2F);
+
+            locationView.setAlpha(0.2F);
+            carChargeView.setAlpha(0.2F);
+            monthlyPlanView.setAlpha(0.2F);
+            if (permissions.contains("read_engine_oil")) {
+                carOilView.setAlpha(1.0F);
+            }
+            if (permissions.contains("read_location")) {
+                locationView.setAlpha(1.0F);
+            }
+            if (permissions.contains("read_battery") || permissions.contains("read_fuel")) {
+                carChargeView.setAlpha(1.0F);
+            }
+        }
         mapView.getMapAsync(locationView);
         locationView.update(car);
         carInfoView.update(car);
         carChargeView.update(CarChargeView.CHARGE,car);
         monthlyPlanView.update(car);
         carOilView.update(CarChargeView.OIL,car);
-        //SupportMapFragment supportMapFragment =(SupportMapFragment)getChildFragmentManager().findFragmentByTag("123");
-        //if (supportMapFragment != null) {
-        //    supportMapFragment.getMapAsync(new OnMapReadyCallback() {
-        //        @Override
-        //        public void onMapReady(@NonNull GoogleMap googleMap) {
-//
-        //        }
-        //    });
-        //}
+
     }
 
     @Override
