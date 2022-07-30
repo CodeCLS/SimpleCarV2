@@ -212,11 +212,10 @@ public class CarUpdater {
         simpleCarSdk.getVehicleIds(new VehicleIdListCallback() {
             @Override
             public void getVehicles(@Nullable List<String> list) {
-                Log.d(TAG, "getVehicles: " + list);
                 if (list != null) {
                     for (String id: list){
                         if (id == null)
-                            continue;
+                            return;
 
                         simpleCarSdk.getVehicleAttributes(id, new VehicleCallback() {
                             @Override
@@ -224,7 +223,22 @@ public class CarUpdater {
                                 if (vehicleAttributes == null)
                                     return;
                                 CarDataBaseRepo.getInstance(context)
-                                        .addCar(Car.parseCar(vehicleAttributes));
+                                        .getCarWithSmartCarId(vehicleAttributes.getVehicleId()
+                                                , new CarDataBaseRepo.OnRetrieveCar() {
+                                                    @Override
+                                                    public void car(Car car) {
+                                                        if (car == null) {
+                                                            CarDataBaseRepo.getInstance(context)
+                                                                    .addCar(Car.parseCar(vehicleAttributes));
+
+                                                        }
+                                                        else{
+                                                            updateSingleCarVars(context, car);
+                                                        }
+
+                                                    }
+                                                });
+
                             }
 
                             @Override
