@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 
 import com.android.billingclient.api.Purchase;
 
+import cls.simplecar.database.CarDataBaseRepo;
 import cls.simplecar.fragments.CarViewModel;
 import cls.simplecar.fragments.GooglePayFragment;
 import cls.simplecar.fragments.IntroductionFragment;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initViews();
         showSplash();
+        Log.d(TAG, "onCreate: " + UserRepository.getInstance(this).getUser().getRefreshTokenSmartCar() + " " + UserRepository.getInstance(this).getUser().getAuthClientSmartCar());
+
 
 
         //getPermissions();
@@ -118,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     //}
                 }
                 else {
+                    CarDataBaseRepo.getInstance(MainActivity.this).deleteAll();
                     showFragment(new IntroductionFragment());
                 }
             }

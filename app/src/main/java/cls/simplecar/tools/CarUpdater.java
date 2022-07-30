@@ -208,14 +208,15 @@ public class CarUpdater {
         updatePermissionsOfCar(context,car);
 
     }
-    public void updateCarsFromOnline(Context context , Runnable toDO) {
+    public void updateCarsFromOnline(Context context) {
         simpleCarSdk.getVehicleIds(new VehicleIdListCallback() {
             @Override
             public void getVehicles(@Nullable List<String> list) {
+                Log.d(TAG, "getVehicles: " + list);
                 if (list != null) {
                     for (String id: list){
                         if (id == null)
-                            return;
+                            continue;
 
                         simpleCarSdk.getVehicleAttributes(id, new VehicleCallback() {
                             @Override
@@ -223,26 +224,7 @@ public class CarUpdater {
                                 if (vehicleAttributes == null)
                                     return;
                                 CarDataBaseRepo.getInstance(context)
-                                        .getCarWithSmartCarId(vehicleAttributes.getVehicleId()
-                                                , new CarDataBaseRepo.OnRetrieveCar() {
-                                                    @Override
-                                                    public void car(Car car) {
-                                                        if (car == null) {
-                                                            CarDataBaseRepo.getInstance(context)
-                                                                    .addCar(Car.parseCar(vehicleAttributes));
-                                                            toDO.run();
-
-                                                        }
-
-
-
-                                                        else{
-                                                            updateSingleCarVars(context, car);
-                                                        }
-
-                                                    }
-                                                });
-
+                                        .addCar(Car.parseCar(vehicleAttributes));
                             }
 
                             @Override

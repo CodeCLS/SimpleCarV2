@@ -27,6 +27,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -233,10 +235,22 @@ public class MainFragment extends Fragment {
         viewModel.getCarMutableLiveData().observe(getActivity(), new Observer<Car>() {
             @Override
             public void onChanged(Car car) {
-                Log.d(TAG, "onChanged123: " +car);
                 viewModel.currentCar = car;
                 if (car != null) {
                     updateViews(car);
+                    locationView.setVisibility(View.VISIBLE);
+                    carInfoView.setVisibility(View.VISIBLE);
+                    monthlyPlanView.setVisibility(View.VISIBLE);
+                    carChargeView.setVisibility(View.VISIBLE);
+                    carOilView.setVisibility(View.VISIBLE);
+                }
+                else{
+                    locationView.setVisibility(View.GONE);
+                    carInfoView.setVisibility(View.GONE);
+                    monthlyPlanView.setVisibility(View.GONE);
+                    carChargeView.setVisibility(View.GONE);
+                    carOilView.setVisibility(View.GONE);
+                    //TODO reauthenticate with car
                 }
             }
         });
@@ -245,24 +259,21 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onChanged(List<Car> cars) {
-                viewModel.updateCurrentCar(cars);
                 this.carOptions = cars;
-                Log.d(TAG, "onChanged:123123 " + cars);
                 if (!MainFragment.this.isVisible()) {
                     return;
                 }
                 carOptionsContainer.removeAllViews();
                 viewModel.startUpdatingAttrs(getContext());
+                if (viewModel.currentCar == null)
+                    viewModel.setSelectedCar(getContext());
+
 
                 for (Car car: cars) {
                     StandardButton standardButton = new StandardButton(getActivity());
-
-                    viewModel.getLiveCarFromDB(getContext(), car.getSmartCarId()).observe(getActivity(), new Observer<Car>() {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
-                        public void onChanged(Car car) {
-                            if (!MainFragment.this.isVisible()) {
-                                return;
-                            }
+                        public void run() {
                             standardButton.setText(mergeCarTitle(car.getBrand(),car.getName(),car.getModel()));
                             standardButton.postInvalidate();
 

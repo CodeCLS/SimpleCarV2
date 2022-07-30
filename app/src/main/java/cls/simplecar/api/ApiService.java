@@ -47,9 +47,9 @@ public interface ApiService {
     @FormUrlEncoded
     Call<ResponseBody> refreshToken(@Header("api-code") String apiCode,
                                     @Header("access-token-smart-car") String token,
-                                    @Path("uid") String uid,
-                                    @Field("client")String client,
-                                    @Field("auth") String auth );
+                                    @Path("uid") String uid,@Field("auth") String auth
+                                    ,@Field("client")String client
+                                     );
     @GET("user/{uid}/validate/smartcar_token")
     Call<ResponseBody> validateToken(@Header("api-code") String apiCode,
                                      @Header("access-token-smart-car") String token,
