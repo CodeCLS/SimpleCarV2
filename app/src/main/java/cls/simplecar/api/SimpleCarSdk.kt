@@ -246,6 +246,28 @@ class SimpleCarSdk {
         })
 
     }
+    fun getMarketValue(id:String,apiResult: CarMarketValueCallback) {
+        service.getCarMarketValue(apiCode,smartCarCode,uid,id).enqueue(object :
+            Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                var body = response.body()?.string()
+                var attrs = Converter().convertMarketValue(body)
+                Log.d(TAG, "onResponsOile: " + body)
+                if(attrs != null){
+                    apiResult.result(attrs)
+                }
+                else{
+                    apiResult.exception(Converter().convertException(body))
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                apiResult.exception(Exception(t.message, ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
+
+            }
+
+        })
+
+    }
     fun getAccessTokenWithAuthToken(token:String,apiResult: ApiAuthPackageCallback) {
         service.getAccessWithAuthToken(apiCode,token,"NO_ACCOUNT").enqueue(object :
             Callback<ResponseBody>{

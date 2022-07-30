@@ -3,6 +3,15 @@ import java.util.*
 
 class ApiManager {
     companion object{
+        public val SUCCESS_CARS_XE = "success"
+        public val RETAIL = "retail"
+        public val TRADE_IN = "tradeIn"
+        public val ROUGH_TRADE_IN = "roughTradeIn"
+        public val AVERAGE_TRADE_IN = "averageTradeIn"
+        public val LOAN_VALUE = "loanValue"
+        public val MSRP = "msrp"
+
+
         public val VEHICLE_ID = "vehicle_id"
         public val PHONE = "phone"
         public val EMAIL = "email"

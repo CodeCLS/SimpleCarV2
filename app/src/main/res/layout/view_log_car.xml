@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/height_car_logs"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_main_location">
-    <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="wrap_content"
+
+
+    <HorizontalScrollView
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent"
-        card_view:layout_constraintBottom_toBottomOf="parent"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:cardBackgroundColor="@color/white"
-        android:elevation="0dp"
-        card_view:cardElevation="0dp"
-        card_view:cardCornerRadius="@dimen/radius_location_map_main">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <!--YOUR CONTENT-->
+        <LinearLayout
+            android:id="@+id/value_linear_car_market_value"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal" />
+
+    </HorizontalScrollView>
 
 
-        <com.google.android.gms.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/map_google1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
-    </androidx.cardview.widget.CardView>
 
 
 

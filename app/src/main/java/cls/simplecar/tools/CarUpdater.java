@@ -18,6 +18,8 @@ import java.util.concurrent.Future;
 
 import javax.security.auth.callback.Callback;
 
+import cls.simplecar.api.CarMarketValue;
+import cls.simplecar.api.CarMarketValueCallback;
 import cls.simplecar.api.Exception;
 import cls.simplecar.api.LocationCallback;
 import cls.simplecar.api.Odometer;
@@ -228,9 +230,10 @@ public class CarUpdater {
                                                     @Override
                                                     public void car(Car car) {
                                                         if (car == null) {
+                                                            Car newCar =Car.parseCar(vehicleAttributes);
                                                             CarDataBaseRepo.getInstance(context)
-                                                                    .addCar(Car.parseCar(vehicleAttributes));
-
+                                                                    .addCar(newCar);
+                                                            updateMarketValue(newCar);
                                                         }
                                                         else{
                                                             updateSingleCarVars(context, car);
@@ -239,6 +242,19 @@ public class CarUpdater {
                                                     }
                                                 });
 
+                            }
+
+                            private void updateMarketValue(Car newCar) {
+                                simpleCarSdk.getMarketValue(newCar.getSmartCarId(), new CarMarketValueCallback() {
+                                    @Override
+                                    public void result(@NonNull CarMarketValue value) {
+                                        newCar.setCarMarketValue(value);
+                                    }
+                                    @Override
+                                    public void exception(@NonNull Exception exception) {
+                                        Log.e(TAG, "exception: "+ exception);
+                                    }
+                                });
                             }
 
                             @Override

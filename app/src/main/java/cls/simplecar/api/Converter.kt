@@ -7,7 +7,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class Converter : LocationConversion, RangeConversion, OdometerConversion,
-    VehicleListConversion,ApiResultConversion, SmartCarAuthConversion, OilConversion, PermissionConversion{
+    VehicleListConversion,ApiResultConversion, SmartCarAuthConversion, OilConversion,
+    PermissionConversion, CarsXEConversion{
     override fun convertLocation(body: String?): Location? {
         var jsonObject = JSONObject(body);
         var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
@@ -146,6 +147,28 @@ class Converter : LocationConversion, RangeConversion, OdometerConversion,
             }
             return array
         }
+        return null
+    }
+
+    override fun convertMarketValue(body: String?): CarMarketValue? {
+        if (body == null)
+            return null
+        var jsonObject = JSONObject(body);
+        var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
+        if (isSuccessful) {
+            var vin: String = jsonObject.getString(ApiManager.VIN)
+            var success: Boolean = jsonObject.getBoolean(ApiManager.SUCCESS_CARS_XE)
+            var retail: Long = jsonObject.getLong(ApiManager.RETAIL)
+            var tradeIn: Long = jsonObject.getLong(ApiManager.TRADE_IN)
+            var roughTradeIn: Long = jsonObject.getLong(ApiManager.ROUGH_TRADE_IN)
+            var averageTradeIn: Long = jsonObject.getLong(ApiManager.AVERAGE_TRADE_IN)
+            var loanValue: Long = jsonObject.getLong(ApiManager.LOAN_VALUE)
+            var msrp: Long = jsonObject.getLong(ApiManager.MSRP)
+
+
+            return CarMarketValue(vin,success,retail,tradeIn,roughTradeIn,averageTradeIn,loanValue,msrp)
+        }
+
         return null
     }
 

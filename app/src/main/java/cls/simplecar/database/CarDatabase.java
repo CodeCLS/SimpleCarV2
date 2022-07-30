@@ -11,7 +11,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {Car.class}, version = 16)
+@Database(entities = {Car.class}, version = 17)
 @TypeConverters({Converter.class})
 public abstract class CarDatabase extends RoomDatabase {
     private static final String DB_NAME = "cars";

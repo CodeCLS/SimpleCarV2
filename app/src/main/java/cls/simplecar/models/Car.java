@@ -2,6 +2,7 @@ package cls.simplecar.models;
 
 
 import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
@@ -9,6 +10,8 @@ import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 
+import cls.simplecar.api.CarMarketValue;
+import cls.simplecar.api.CarMarketValueCallback;
 import cls.simplecar.api.VehicleAttributes;
 import cls.simplecar.tools.DateUtil;
 
@@ -34,6 +37,8 @@ public class Car {
     private Double driveProductAmount = -1.0;
     private Double driveProductAmountPercent = -1.0;
 
+    @Embedded private CarMarketValue carMarketValue;
+
     private Double driveDuration = -1.0;
     private Integer tirePressure = 0;
     private Boolean canHeat = true;
@@ -47,7 +52,12 @@ public class Car {
         this.smartCarId = smartCarId;
     }
 
-    public Car(Long roomId, String smartCarId, String model, String name, String brand, Long year, Boolean isLocked, Boolean isElectric, Long odometer, Double oilPercentage, ArrayList<String> hasPermissions, Location location, Double driveProductAmount, Double driveProductAmountPercent, Double driveDuration, Integer tirePressure, Boolean canHeat, Boolean isAirCondOn, String vin) {
+    public Car(Long roomId, String smartCarId, String model, String name,
+               String brand, Long year, Boolean isLocked, Boolean isElectric,
+               Long odometer, Double oilPercentage, ArrayList<String> hasPermissions,
+               Location location, Double driveProductAmount, Double driveProductAmountPercent,
+               Double driveDuration, Integer tirePressure, Boolean canHeat, Boolean isAirCondOn,
+               String vin, CarMarketValue carMarketValue) {
         this.roomId = roomId;
         this.smartCarId = smartCarId;
         this.model = model;
@@ -67,6 +77,7 @@ public class Car {
         this.canHeat = canHeat;
         this.isAirCondOn = isAirCondOn;
         this.vin = vin;
+        this.carMarketValue = carMarketValue;
     }
 
     public static Car parseCar(VehicleAttributes vehicleAttributes) {
@@ -79,6 +90,13 @@ public class Car {
         return car;
     }
 
+    public CarMarketValue getCarMarketValue() {
+        return carMarketValue;
+    }
+
+    public void setCarMarketValue(CarMarketValue carMarketValue) {
+        this.carMarketValue = carMarketValue;
+    }
 
     public Long getRoomId() {
         return roomId;

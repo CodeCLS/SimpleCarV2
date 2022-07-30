@@ -110,4 +110,11 @@ public interface ApiService {
                               @Header("access-token-smart-car") String token,
                               @Path("uid") String uid,
                               @Path("id") String id);
+
+    @GET("user/{uid}/vehicle/{id}/market_value")
+    Call<ResponseBody> getCarMarketValue(@Header("api-code") String apiCode,
+                              @Header("access-token-smart-car") String token,
+                              @Path("uid") String uid,
+                              @Path("id") String id);
+
 }

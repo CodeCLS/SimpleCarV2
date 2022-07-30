@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import cls.simplecar.R;
+import cls.simplecar.models.Car;
+import cls.simplecar.tools.OnCarUpdate;
 
-public class FuelPriceView extends FrameLayout {
+public class FuelPriceView extends FrameLayout implements OnCarUpdate {
     public FuelPriceView(@NonNull Context context) {
         super(context);
         init();
@@ -33,5 +35,10 @@ public class FuelPriceView extends FrameLayout {
     public FuelPriceView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
+    }
+
+    @Override
+    public void update(Car car) {
+
     }
 }

@@ -88,7 +88,7 @@
                 app:layout_constraintTop_toBottomOf="@id/car_log_view"
                 app:standard_btn_icon="@drawable/ic_delete"
                 app:standard_btn_text="Remove" />
-            <cls.simplecar.views.CarLogView
+            <cls.simplecar.views.CarMarketValueView
                 android:id="@+id/car_log_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

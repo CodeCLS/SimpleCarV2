@@ -204,7 +204,6 @@ public class CarViewModel extends ViewModel {
                     Log.d(TAG, "result: " +packageSmartCar.getAccessToken());
                     updateUserAccess(context,packageSmartCar);
                     carUpdater.updateCarsFromOnline(context);
-                    carsLiveData = CarDataBaseRepo.getInstance(context).getLiveCars();
 
 
 
@@ -228,6 +227,8 @@ public class CarViewModel extends ViewModel {
 
 
     private void updateUserAccess(Context context,@NonNull ApiSmartCarAuthPackage packageSmartCar) {
+        carsLiveData = CarDataBaseRepo.getInstance(context).getLiveCars();
+        setSelectedCar(context);
         User user = UserRepository.getInstance(context).getUser();
         if (user == null) {
             Log.d(TAG, "getHasSmartCarAccessAfterCheckfalse ");
