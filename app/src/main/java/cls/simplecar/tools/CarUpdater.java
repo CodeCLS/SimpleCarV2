@@ -49,7 +49,6 @@ public class CarUpdater {
     public void startUpdatingAttrs(Context context){
         CarDataBaseRepo.getInstance(context).getCars(cars -> {
             for (Car car : cars) {
-                updateAllAttrs(context, car);
                 UpdaterConnection updaterConnection = new UpdaterConnection(() -> updateAllAttrs(context,car));
                 CarAttributesUpdater carAttributesUpdater = new CarAttributesUpdater(updaterConnection);
                 carAttributesUpdater.run();
@@ -64,8 +63,6 @@ public class CarUpdater {
         Future<?> i = executorService.submit(() -> {
             new SmartCarInspectPermissionsUtil(simpleCarSdk).updateToPermission(context, car,permissions);
 
-
-
         });
 
     }
@@ -77,9 +74,7 @@ public class CarUpdater {
                         new CarDataBaseRepo.OnRetrieveCar() {
                             @Override
                             public void car(Car car) {
-                                Log.d(TAG, "car:1 " + car.getRoomId() + car.getSmartCarId());
-                                if (location != null) {
-                                    Log.d(TAG, "car:11 " + car.getRoomId() + car.getSmartCarId() + " " + location);
+                                if (car != null && location != null) {
                                     car.setLocation(new Location(location.getLatitude(), location.getLongitude()));
                                     CarDataBaseRepo.getInstance(context).updateCar(car);
                                 }
@@ -130,7 +125,7 @@ public class CarUpdater {
                         new CarDataBaseRepo.OnRetrieveCar() {
                             @Override
                             public void car(Car car) {
-                                if (oil != null) {
+                                if (oil != null && car != null) {
                                     car.setOilPercentage(oil.getOilPercentage());
                                     CarDataBaseRepo.getInstance(context).updateCar(car);
 
@@ -203,11 +198,13 @@ public class CarUpdater {
         });
     }
     public void updateSingleCarVars(Context context, Car car) {
-        updateLocationOfCar(context,car);
-        updateRangeOfCar(context,car);
-        updateOdometerOfCar(context,car);
-        updateOilOfCar(context,car);
         updatePermissionsOfCar(context,car);
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                new SmartCarInspectPermissionsUtil(simpleCarSdk).updateToPermission(context,car, car.getHasPermissions());
+            }
+        });
 
     }
     public void updateCarsFromOnline(Context context) {
@@ -252,14 +249,14 @@ public class CarUpdater {
                                     }
                                     @Override
                                     public void exception(@NonNull Exception exception) {
-                                        Log.e(TAG, "exception: "+ exception);
+                                        Log.e(TAG, "exception1: "+ exception);
                                     }
                                 });
                             }
 
                             @Override
                             public void exception(@NonNull Exception exception) {
-                                Log.e(TAG, "exception: "+ exception );
+                                Log.e(TAG, "exception2: "+ exception );
 
                             }
                         });
@@ -271,7 +268,7 @@ public class CarUpdater {
 
             @Override
             public void exception(@NonNull Exception exception) {
-                Log.e(TAG, "exception: "+ exception);
+                Log.e(TAG, "exception3: "+ exception);
 
             }
         });

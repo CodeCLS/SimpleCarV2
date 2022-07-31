@@ -7,18 +7,13 @@ import cls.simplecar.SaveDataTool;
 import cls.simplecar.Spawner;
 
 import cls.simplecar.api.Exception;
-import cls.simplecar.database.CarDataBaseRepo;
 import cls.simplecar.models.Car;
-import cls.simplecar.tools.DirectionsTool;
 import cls.simplecar.views.CarChargeView;
 import cls.simplecar.views.CarInfoView;
 import cls.simplecar.views.LocationView;
 import cls.simplecar.views.MonthlyPlanView;
 import cls.simplecar.views.StandardButton;
-import cls.simplecar.MainActivity;
 import cls.simplecar.api.ApiResult;
-import cls.simplecar.models.Car;
-import cls.simplecar.views.StandardButton;
 
 import android.content.Context;
 import android.content.Intent;
@@ -64,6 +59,8 @@ public class MainFragment extends Fragment {
     private CarChargeView carChargeView;
     private MonthlyPlanView monthlyPlanView;
     private StandardButton lock;
+    private StandardButton startChargeBtn;
+    private StandardButton endChargeBtn;
     private MapView mapView;
     private View rootView;
     private LocationView locationView;
@@ -101,8 +98,10 @@ public class MainFragment extends Fragment {
 
         unlock = view.findViewById(R.id.main_unlock_btn);
         lock = view.findViewById(R.id.main_lock_btn);
-        unlock.setHasTemporarelyCancelledFucntion(true);
-        lock.setHasTemporarelyCancelledFucntion(true);
+        unlock.setHasTemporarelyCancelledFunction(true);
+        lock.setHasTemporarelyCancelledFunction(true);
+        startChargeBtn = view.findViewById(R.id.main_car_start_charge_btn);
+        endChargeBtn = view.findViewById(R.id.main_car_end_charge_btn);
         MapsInitializer.initialize(getContext());
         carOptionsContainer = view.findViewById(R.id.car_list_linearlayout);
 
@@ -132,6 +131,9 @@ public class MainFragment extends Fragment {
         boolean isEnabled = saveDataTool.getBoolean(SaveDataTool.SIMPLECAR_NOTIFICATIONS,false);
         notifications.theme(isEnabled ? StandardButton.DISABLED : StandardButton.ENABLED);
 
+        viewModel.startUpdatingAttrs(getContext());
+
+
         notifications.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
             @Override
@@ -160,6 +162,7 @@ public class MainFragment extends Fragment {
                 viewModel.unlockCar(getContext(), new ApiResult() {
                     @Override
                     public void exception(@NonNull Exception exception) {
+                        Log.e(TAG, "exception: "+ exception);
 
                     }
 
@@ -167,12 +170,43 @@ public class MainFragment extends Fragment {
                     public void result(boolean result) {
                         if (result)
                             Toast.makeText(getContext(), R.string.unlock_request_send, Toast.LENGTH_SHORT).show();
-                        //if (result) {
-                        //    String title = "Unlock";
-                        //    String desc = "An unlock request has been sent to your car. If your car isn't unlocked within the minute, please try again later or contact support.";
-                        //    boolean hasButton = true;
-                        //    Spawner.queueSpawnMessageToast(title, desc, hasButton, view, parent);
-                        //}
+                        else{
+                            Toast.makeText(getContext(), R.string.unlock_request_send_failure, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+        startChargeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                viewModel.startChargingCar(getContext(), new ApiResult() {
+                    @Override
+                    public void exception(@NonNull Exception exception) {
+
+                    }
+
+                    @Override
+                    public void result(boolean result) {
+                        if (result)
+                            Toast.makeText(getContext(), R.string.unlock_request_send, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        endChargeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                viewModel.stopChargingCar(getContext(), new ApiResult() {
+                    @Override
+                    public void exception(@NonNull Exception exception) {
+
+                    }
+
+                    @Override
+                    public void result(boolean result) {
+                        if (result)
+                            Toast.makeText(getContext(), R.string.unlock_request_send, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -198,6 +232,7 @@ public class MainFragment extends Fragment {
                 viewModel.lockCar(getContext(), new ApiResult() {
                     @Override
                     public void exception(@NonNull Exception exception) {
+                        Log.e(TAG, "exception: "+ exception);
 
                     }
 
@@ -205,6 +240,10 @@ public class MainFragment extends Fragment {
                     public void result(boolean result) {
                         if (result)
                             Toast.makeText(getContext(), R.string.lock_request_send, Toast.LENGTH_SHORT).show();
+                        else{
+                            Toast.makeText(getContext(), R.string.lock_request_send_failure, Toast.LENGTH_SHORT).show();
+
+                        }
                        // if (result) {
                        //     String title = "Lock";
                        //     String desc = "A lock request has been sent to your car. If your car isn't locked within the minute, please try again later or contact support";
@@ -264,7 +303,6 @@ public class MainFragment extends Fragment {
                     return;
                 }
                 carOptionsContainer.removeAllViews();
-                viewModel.startUpdatingAttrs(getContext());
                 if (viewModel.currentCar == null)
                     viewModel.setSelectedCar(getContext());
 

@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout frameLayout;
     private CarViewModel viewModelCar;
     private Bundle savedInstance;
+    private boolean firstTimeAppOpened = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +118,10 @@ public class MainActivity extends AppCompatActivity {
                     //}
                     //else {
                         redirect();
-                        viewModelCar.updateCarsFromOnline(getApplicationContext());
+                        if (firstTimeAppOpened) {
+                            viewModelCar.updateCarsFromOnline(getApplicationContext());
+                            firstTimeAppOpened = false;
+                        }
                     //}
                 }
                 else {

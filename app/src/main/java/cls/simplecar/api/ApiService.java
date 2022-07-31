@@ -117,4 +117,14 @@ public interface ApiService {
                               @Path("uid") String uid,
                               @Path("id") String id);
 
+    @POST("user/{uid}/vehicle/{id}/start_charge")
+    Call<ResponseBody> startCharge(@Header("api-code") String apiCode,
+                                     @Header("access-token-smart-car") String token,
+                                     @Path("uid") String uid,
+                                     @Path("id") String id);
+    @POST("user/{uid}/vehicle/{id}/stop_charge")
+    Call<ResponseBody> stopCharge(@Header("api-code") String apiCode,
+                                   @Header("access-token-smart-car") String token,
+                                   @Path("uid") String uid,
+                                   @Path("id") String id);
 }

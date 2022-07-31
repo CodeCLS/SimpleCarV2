@@ -140,6 +140,7 @@ public class CarViewModel extends ViewModel {
 
                 @Override
                 public void result(boolean result) {
+                    Log.d(TAG, "result: ");
                     handleTokenResult(result);
 
                 }
@@ -150,10 +151,6 @@ public class CarViewModel extends ViewModel {
                     if (!result) {
 
                         refreshToken(user, context);
-                    }
-                    else {
-                        carUpdater.updateCarsFromOnline(context);
-
                     }
                 }
             });
@@ -203,7 +200,6 @@ public class CarViewModel extends ViewModel {
                 if (packageSmartCar != null){
                     Log.d(TAG, "result: " +packageSmartCar.getAccessToken());
                     updateUserAccess(context,packageSmartCar);
-                    carUpdater.updateCarsFromOnline(context);
 
 
 
@@ -228,7 +224,7 @@ public class CarViewModel extends ViewModel {
 
     private void updateUserAccess(Context context,@NonNull ApiSmartCarAuthPackage packageSmartCar) {
         carsLiveData = CarDataBaseRepo.getInstance(context).getLiveCars();
-        setSelectedCar(context);
+        setSelectedCar(context);//TODO set uid as smartcar uid
         User user = UserRepository.getInstance(context).getUser();
         if (user == null) {
             Log.d(TAG, "getHasSmartCarAccessAfterCheckfalse ");
@@ -300,5 +296,14 @@ public class CarViewModel extends ViewModel {
     public void getCarFromDB(Context context, String smartCarId, CarDataBaseRepo.OnRetrieveCar callback) {
         CarDataBaseRepo.getInstance(context).getCarWithSmartCarId(smartCarId,callback);
 
+    }
+
+    public void startChargingCar(Context context, ApiResult apiResult) {
+        if (currentCar!= null)
+            simpleCarSdk.startChargingCar(currentCar.getSmartCarId(),apiResult);
+    }
+    public void stopChargingCar(Context context, ApiResult apiResult) {
+        if (currentCar!= null)
+            simpleCarSdk.stopChargingCar(currentCar.getSmartCarId(),apiResult);
     }
 }

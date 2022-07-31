@@ -78,13 +78,13 @@ public class StandardButton extends FrameLayout {
         try {
             icon.setImageResource(iconReference);
         }catch (Exception e){
-            Log.e(TAG, "init: ", e);
+            Log.d(TAG, "ERROR_SMALL: ", e);
             icon.setVisibility(GONE);
         }
         textView.setText(text);
     }
 
-    public void setHasTemporarelyCancelledFucntion(boolean hasTemporarelyCancelledFucntion) {
+    public void setHasTemporarelyCancelledFunction(boolean hasTemporarelyCancelledFucntion) {
         this.hasTemporarelyCancelledFucntion = hasTemporarelyCancelledFucntion;
     }
 

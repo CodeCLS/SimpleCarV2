@@ -27,5 +27,7 @@
     <string name="access_expired">Access Expired</string>
     <string name="lock_request_send">A lock request has been send</string>
     <string name="unlock_request_send">An unlock request has been send</string>
+    <string name="unlock_request_send_failure">Unlock request has failed</string>
+    <string name="lock_request_send_failure">Lock Request has failed</string>
 
 </resources>

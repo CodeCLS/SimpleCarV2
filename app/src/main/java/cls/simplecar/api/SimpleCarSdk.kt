@@ -131,7 +131,9 @@ class SimpleCarSdk {
         service.isTokenValid(apiCode,smartCarCode,uid).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                apiResult.result(Converter().convertApiResult(response.body()?.string()))
+                var value = response.body()?.string()
+                Log.d(TAG, "onResponse: " + value)
+                apiResult.result(Converter().convertApiResult(value))
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.d(TAG, "onFailure: " + t.message)
@@ -166,6 +168,46 @@ class SimpleCarSdk {
     }
     fun unlockVehicle(id:String,apiResult: ApiResult) {
         service.unlockVehicle(apiCode,smartCarCode,uid,id).enqueue(object :
+            Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                var body = response.body()?.string()
+                var result = Converter().convertApiResult(body)
+                if(!result){
+                    apiResult.exception(Converter().convertException(body))
+                }
+                apiResult.result(result)
+
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                apiResult.result(false)
+
+            }
+
+        })
+
+    }
+    fun startChargingCar(id:String,apiResult: ApiResult) {
+        service.startCharge(apiCode,smartCarCode,uid,id).enqueue(object :
+            Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                var body = response.body()?.string()
+                var result = Converter().convertApiResult(body)
+                if(!result){
+                    apiResult.exception(Converter().convertException(body))
+                }
+                apiResult.result(result)
+
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                apiResult.result(false)
+
+            }
+
+        })
+
+    }
+    fun stopChargingCar(id:String,apiResult: ApiResult) {
+        service.stopCharge(apiCode,smartCarCode,uid,id).enqueue(object :
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 var body = response.body()?.string()

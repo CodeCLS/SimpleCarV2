@@ -85,7 +85,7 @@
                 android:layout_marginTop="@dimen/margin_1"
 
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/car_log_view"
+                app:layout_constraintTop_toBottomOf="@id/btn_container_charge_car"
                 app:standard_btn_icon="@drawable/ic_delete"
                 app:standard_btn_text="Remove" />
             <cls.simplecar.views.CarMarketValueView
@@ -145,6 +145,49 @@
             </LinearLayout>
 
 
+            <LinearLayout
+                android:id="@+id/btn_container_charge_car"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_1"
+                android:layout_marginEnd="@dimen/margin_1"
+
+                android:layout_marginTop="@dimen/margin_1"
+
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/btn_container_lock"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <cls.simplecar.views.StandardButton
+                    android:id="@+id/main_car_start_charge_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+
+                    android:layout_weight="1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+
+                    app:layout_constraintStart_toEndOf="@+id/main_unlock_btn"
+                    app:standard_btn_icon="@drawable/ic_lock"
+                    app:standard_btn_text="Start Charging" />
+
+                <cls.simplecar.views.StandardButton
+                    android:id="@+id/main_car_end_charge_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/main_lock_btn"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:standard_btn_icon="@drawable/ic_unlock"
+                    app:standard_btn_text="Stop Charging" />
+
+
+            </LinearLayout>
             <cls.simplecar.views.CarChargeView
                 android:id="@+id/car_charge_view"
                 android:layout_width="match_parent"
