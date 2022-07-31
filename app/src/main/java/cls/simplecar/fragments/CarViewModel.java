@@ -68,8 +68,8 @@ public class CarViewModel extends ViewModel {
 
     public MutableLiveData<Location> monthlySubscriptionMutableLiveData = new MutableLiveData<>();
     public MutableLiveData<Boolean> isNotificationsEnabled = new MutableLiveData<>();
-    public MutableLiveData<Boolean> hasSmartCarAccess = new MutableLiveData<>(true);
-    public MutableLiveData<Boolean> hasSimpleCarAccess = new MutableLiveData<>(true);
+    public MutableLiveData<Boolean> hasSmartCarAccess = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> hasSimpleCarAccess = new MutableLiveData<>(false);
 
     private SmartCarLauncher launcher;
     public Car currentCar;
