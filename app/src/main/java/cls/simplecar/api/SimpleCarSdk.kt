@@ -15,7 +15,7 @@ class SimpleCarSdk {
     private var hasFunctionalAttributes: Boolean = true
     private var apiCode: String?
     var smartCarCode: String?
-    private var uid: String?
+    var uid: String?
     private val version : Int = 10//asd
 
     private lateinit var service : ApiService
@@ -132,7 +132,7 @@ class SimpleCarSdk {
             Callback<ResponseBody>{
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 var value = response.body()?.string()
-                Log.d(TAG, "onResponse: " + value)
+                Log.d(TAG, "onResponsevalid: " + value)
                 apiResult.result(Converter().convertApiResult(value))
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -324,6 +324,20 @@ class SimpleCarSdk {
         })
 
     }
+    fun getSmartCarUser(apiResult: StringCallback) {
+        service.getUser(apiCode,smartCarCode,uid).enqueue(object :
+            Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                apiResult.result(Converter().convertUserId(response.body()?.string()))
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                apiResult.exception(Exception(t.message, ExceptionManager.EXCEPTION_API_CALL_EXTERNAL))
+
+            }
+
+        })
+
+    }
     fun refreshToken(auth:String, authClient:String,apiResult: ApiAuthPackageCallback) {
         Log.d(TAG, "refreshToken: " + auth + " " + authClient + " " + apiCode)
         service.refreshToken(apiCode,smartCarCode,"NO_ACCOUNT",auth,authClient).enqueue(object :
@@ -403,6 +417,8 @@ class SimpleCarSdk {
 
         })
     }
+
+
 
 
     interface OnSimpleCarSignUpFeedback{

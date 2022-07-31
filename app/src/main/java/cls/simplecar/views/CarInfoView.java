@@ -28,6 +28,8 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.Objects;
+
 public class CarInfoView extends FrameLayout implements OnCarUpdate {
     private ImageView carImg;
     private TextView name;
@@ -73,9 +75,9 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
 
     }
 
+    private static final String TAG = "CarInfoView";
     @Override
     public void update(Car car) {
-        this.car = car;
         post(new Runnable() {
             @Override
             public void run() {
@@ -91,9 +93,16 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
                 if (car.getOdometer() < 0)
                     odometer.setText("Loading");
                 name.setText(mergeCarTitle(car.getBrand(),car.getName(),car.getModel()));
+
                 DirectionsTool.getExactLocation(getContext(), new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
+                        if (car.getLocation() == null || car.getLocation().getLatitude() == 51.5 )
+                            return;
+                        getWalktingTime(location);
+                    }
+
+                    private void getWalktingTime(Location location) {
                         DirectionsTool.getWalkingTime(getContext(),
                                 location, car.getLocation(),
                                 new DirectionsTool.OnRetrieveWalkingTime() {
@@ -122,7 +131,7 @@ public class CarInfoView extends FrameLayout implements OnCarUpdate {
                 return brand +" " + name + " " + model;
             }
         });
-
+        this.car = car;
 
     }
 }

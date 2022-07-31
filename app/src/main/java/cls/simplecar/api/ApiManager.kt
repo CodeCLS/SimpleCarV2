@@ -28,6 +28,8 @@ class ApiManager {
         public val ACCESS_TOKEN = "access_token"
         public val REFRESH_TOKEN = "refresh_token"
 
+        public val UID_SMART = "smartcar_uid"
+
         public val AUTH_CLIENT = "auth_client"
         public val AUTH = "auth"
         public val LATITUDE = "latitude"

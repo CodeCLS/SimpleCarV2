@@ -8,7 +8,7 @@ import org.json.JSONObject
 
 class Converter : LocationConversion, RangeConversion, OdometerConversion,
     VehicleListConversion,ApiResultConversion, SmartCarAuthConversion, OilConversion,
-    PermissionConversion, CarsXEConversion{
+    PermissionConversion, CarsXEConversion, UserConverter{
     override fun convertLocation(body: String?): Location? {
         var jsonObject = JSONObject(body);
         var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
@@ -169,6 +169,18 @@ class Converter : LocationConversion, RangeConversion, OdometerConversion,
             return CarMarketValue(vin,success,retail,tradeIn,roughTradeIn,averageTradeIn,loanValue,msrp)
         }
 
+        return null
+    }
+
+    override fun convertUserId(body: String?): String? {
+        if (body == null)
+            return null
+        var jsonObject = JSONObject(body);
+        var isSuccessful = jsonObject.getBoolean(ApiManager.SUCCESSFUL_ACTION)
+        if (isSuccessful) {
+            var id: String = jsonObject.getString(ApiManager.UID_SMART)
+            return id
+        }
         return null
     }
 

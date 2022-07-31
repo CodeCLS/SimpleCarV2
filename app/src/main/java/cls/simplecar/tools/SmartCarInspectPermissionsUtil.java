@@ -13,6 +13,8 @@ public class SmartCarInspectPermissionsUtil extends CarUpdater {
     }
 
     public void updateToPermission(Context context, Car car, ArrayList<String> permissions) {
+        updatePermissionsOfCar(context,car);
+
         if (permissions.contains("read_engine_oil")){
             updateOilOfCar(context,car);
         }
@@ -25,6 +27,5 @@ public class SmartCarInspectPermissionsUtil extends CarUpdater {
         if (permissions.contains("read_odometer")){
             updateOdometerOfCar(context,car);
         }
-        updatePermissionsOfCar(context,car);
     }
 }
