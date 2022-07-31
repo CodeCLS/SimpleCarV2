@@ -152,7 +152,6 @@ public class CarViewModel extends ViewModel {
                 }
 
                 private void handleTokenResult(boolean result) {
-                    hasSmartCarAccess.setValue(result);
 
                     if (!result) {
 
@@ -176,7 +175,6 @@ public class CarViewModel extends ViewModel {
             public void result(@Nullable ApiSmartCarAuthPackage packageSmartCar) {
                 if (packageSmartCar != null) {
                     updateUserAccess(context,packageSmartCar);
-                    hasSmartCarAccess.setValue(true);
 
                 } else {
                     hasSmartCarAccess.setValue(false);
@@ -235,7 +233,6 @@ public class CarViewModel extends ViewModel {
         user.setAuthClientSmartCar(packageSmartCar.getAuthClient());
         user.setAuthSmartCar(packageSmartCar.getAuth());
         user.setRefreshTokenSmartCar(packageSmartCar.getRefreshToken());
-        getHasSmartCarAccess().setValue(true);
         simpleCarSdk.setSmartCarCode((packageSmartCar.getAccessToken()));
         simpleCarSdk.getSmartCarUser(new StringCallback() {
             @Override
@@ -245,11 +242,14 @@ public class CarViewModel extends ViewModel {
 
 
                 UserRepository.getInstance(context).saveUser(user);
+                getHasSmartCarAccess().setValue(true);
+
             }
 
             @Override
             public void exception(@Nullable Exception exception) {
                 Log.e(TAG, "exception: "+ exception);
+                getHasSmartCarAccess().setValue(false);
 
             }
         });
