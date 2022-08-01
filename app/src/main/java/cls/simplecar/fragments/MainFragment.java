@@ -282,6 +282,9 @@ public class MainFragment extends Fragment {
                     monthlyPlanView.setVisibility(View.VISIBLE);
                     carChargeView.setVisibility(View.VISIBLE);
                     carOilView.setVisibility(View.VISIBLE);
+                    endChargeBtn.setVisibility(View.GONE);
+                    startChargeBtn.setVisibility(View.GONE);
+
                 }
                 else{
                     locationView.setVisibility(View.GONE);
@@ -289,6 +292,8 @@ public class MainFragment extends Fragment {
                     monthlyPlanView.setVisibility(View.GONE);
                     carChargeView.setVisibility(View.GONE);
                     carOilView.setVisibility(View.GONE);
+                    endChargeBtn.setVisibility(View.GONE);
+                    startChargeBtn.setVisibility(View.GONE);
                     //TODO reauthenticate with car
                 }
             }
@@ -376,6 +381,7 @@ public class MainFragment extends Fragment {
             if (permissions.contains("read_battery") || permissions.contains("read_fuel")) {
                 carChargeView.setAlpha(1.0F);
             }
+
         }
         mapView.getMapAsync(locationView);
         locationView.update(car);

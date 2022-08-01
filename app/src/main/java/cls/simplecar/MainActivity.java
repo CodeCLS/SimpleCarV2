@@ -23,6 +23,7 @@ import cls.simplecar.fragments.CarViewModel;
 import cls.simplecar.fragments.GooglePayFragment;
 import cls.simplecar.fragments.IntroductionFragment;
 import cls.simplecar.fragments.IntroductionSliderFragment;
+import cls.simplecar.fragments.LeadGenerationBeforeLaunchFragment;
 import cls.simplecar.fragments.MainFragment;
 import cls.simplecar.fragments.SplashScreen;
 import cls.simplecar.tools.BillingTool;
@@ -72,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                initViewModel();
-                getPermissions();
-                observe();
-                //showFragment(new IntroductionSliderFragment());
+                //initViewModel();
+                //getPermissions();
+                //observe();
+                showFragment(new LeadGenerationBeforeLaunchFragment());
 
             }
         },CONSTANT_SPLASH_SCREEN_TIME);
