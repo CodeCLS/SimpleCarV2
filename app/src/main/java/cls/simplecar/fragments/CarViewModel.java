@@ -68,7 +68,7 @@ public class CarViewModel extends ViewModel {
 
     public MutableLiveData<Location> monthlySubscriptionMutableLiveData = new MutableLiveData<>();
     public MutableLiveData<Boolean> isNotificationsEnabled = new MutableLiveData<>();
-    public MutableLiveData<Boolean> hasSmartCarAccess = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> hasSmartCarAccess = new MutableLiveData<>();
     public MutableLiveData<Boolean> hasSimpleCarAccess = new MutableLiveData<>(false);
 
     private SmartCarLauncher launcher;
@@ -82,30 +82,32 @@ public class CarViewModel extends ViewModel {
     }
 
     public void init(Context context){
-        carsLiveData = CarDataBaseRepo.getInstance(context).getLiveCars();
-        setSelectedCar(context);
-
         User user = UserRepository.getInstance(context).getUser();
         saveDataTool = new SaveDataTool(context);
         String accessTokenSmartCar = "";
         Log.d(TAG, "init:123 " + user.getAccessTokenSmartCar() +" " +  user.getRefreshTokenSmartCar() + " " + user.getAuthClientSmartCar() + user.getAuthSmartCar());
 
         String uid = "";
+
+
         if (user != null) {
             accessTokenSmartCar = user.getAccessTokenSmartCar();
-            Log.d(TAG, "init:123 " + accessTokenSmartCar);
             uid = user.getUidSimpleCar();
+            carsLiveData = CarDataBaseRepo.getInstance(context).getLiveCars();
+            setSelectedCar(context);
             hasSimpleCarAccess.setValue(true);
         }
         else {
             hasSimpleCarAccess.setValue(false);
         }
-
         simpleCarSdk = SimpleCarSdk.Companion.get(
                 Application.getSimpleCarApiCode(),
                 accessTokenSmartCar,
                 uid);
         carUpdater = new CarUpdater(simpleCarSdk);
+
+
+
 
     }
 
@@ -146,7 +148,7 @@ public class CarViewModel extends ViewModel {
 
                 @Override
                 public void result(boolean result) {
-                    Log.d(TAG, "result: " +result);
+                    hasSmartCarAccess.setValue(result);
                     handleTokenResult(result);
 
                 }
@@ -205,9 +207,6 @@ public class CarViewModel extends ViewModel {
                     Log.d(TAG, "result: " +packageSmartCar.getAccessToken());
                     updateUserAccess(context,packageSmartCar);
 
-
-
-
                 }
             }
 
@@ -239,10 +238,11 @@ public class CarViewModel extends ViewModel {
             public void result(@Nullable String result) {
                 user.setUidSimpleCar(result);
                 simpleCarSdk.setUid(result);
-
-
                 UserRepository.getInstance(context).saveUser(user);
+                if (carUpdater == null)
+                    carUpdater = new CarUpdater(simpleCarSdk);
                 getHasSmartCarAccess().setValue(true);
+
 
             }
 

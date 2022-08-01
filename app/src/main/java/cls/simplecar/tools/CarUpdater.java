@@ -9,12 +9,14 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 import javax.security.auth.callback.Callback;
 
@@ -38,12 +40,15 @@ import cls.simplecar.models.Car;
 import cls.simplecar.models.Location;
 
 public class CarUpdater {
-    private ExecutorService executorService = Executors.newFixedThreadPool(4);
+    private ExecutorService executorService;
     private final SimpleCarSdk simpleCarSdk;
     private static final String TAG = "CarUpdater";
 
     public CarUpdater(SimpleCarSdk simpleCarSdk) {
         this.simpleCarSdk = simpleCarSdk;
+        ThreadFactory namedThreadFactory =
+                new ThreadFactoryBuilder().setNameFormat("CarUpdaterThread").build();
+        executorService = Executors.newFixedThreadPool(4,namedThreadFactory);
     }
 
     public void startUpdatingAttrs(Context context){
@@ -60,7 +65,7 @@ public class CarUpdater {
 
     private void updateAllAttrs(Context context,Car car) {
         ArrayList<String> permissions = car.getHasPermissions();
-        Future<?> i = executorService.submit(() -> {
+        executorService.execute(() -> {
             new SmartCarInspectPermissionsUtil(simpleCarSdk).updateToPermission(context, car,permissions);
 
         });
@@ -91,6 +96,7 @@ public class CarUpdater {
         });
     }
     public void updateRangeOfCar(Context context, Car car) {
+        Log.d(TAG, "updateRangeOfCar: ");
         simpleCarSdk.getRange(car.getSmartCarId(),new RangeCallback() {
             @Override
             public void range(@Nullable Range range) {
@@ -98,7 +104,9 @@ public class CarUpdater {
                         new CarDataBaseRepo.OnRetrieveCar() {
                             @Override
                             public void car(Car car) {
+                                Log.d(TAG, "c123ar: " + car  + " " + range);
                                 if (range != null) {
+                                    Log.d(TAG, "car: " + car  + " " + range);
                                     car.setDriveProductAmountPercent(range.getPercent());
                                     car.setDriveProductAmount(range.getAmount());
                                     CarDataBaseRepo.getInstance(context).updateCar(car);
@@ -198,11 +206,18 @@ public class CarUpdater {
         });
     }
     public void updateSingleCarVars(Context context, Car car) {
-        updatePermissionsOfCar(context,car);
-        executorService.submit(new Runnable() {
+
+        executorService.execute(new Runnable() {
             @Override
             public void run() {
-                new SmartCarInspectPermissionsUtil(simpleCarSdk).updateToPermission(context,car, car.getHasPermissions());
+                updatePermissionsOfCar(context,car);
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        new SmartCarInspectPermissionsUtil(simpleCarSdk).updateToPermission(context,car, car.getHasPermissions());
+                    }
+                });
+
             }
         });
 
