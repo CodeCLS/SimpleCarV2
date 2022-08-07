@@ -22,7 +22,7 @@ import org.json.JSONObject;
 
 public class DirectionsTool {
 
-    private static final String API_KEY = "AIzaSyAY_1zvQ4SWzKuGPnBvIxAt1FE3bObkjAk";
+    private static final String API_KEY = "NONE";
     private static final String TAG = "DirectionsTool";
 
     public static void getExactLocation(Context context, OnSuccessListener<? super Location> listener){
